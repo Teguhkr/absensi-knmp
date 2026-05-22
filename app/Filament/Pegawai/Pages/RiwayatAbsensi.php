@@ -5,7 +5,6 @@ namespace App\Filament\Pegawai\Pages;
 use App\Models\Absensi;
 use Filament\Pages\Page;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
@@ -45,15 +44,17 @@ class RiwayatAbsensi extends Page implements HasTable
                     ->placeholder('-'),
                 TextColumn::make('durasi_kerja')
                     ->label('Durasi'),
-                BadgeColumn::make('status')
+                TextColumn::make('status')
                     ->label('Status')
-                    ->colors([
-                        'success' => 'hadir',
-                        'warning' => 'terlambat',
-                        'info'    => 'izin',
-                        'warning' => 'sakit',
-                        'danger'  => 'alpha',
-                    ])
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'hadir'     => 'success',
+                        'terlambat' => 'warning',
+                        'izin'      => 'info',
+                        'sakit'     => 'warning',
+                        'alpha'     => 'danger',
+                        default     => 'gray',
+                    })
                     ->formatStateUsing(fn ($state) => match($state) {
                         'hadir'     => 'Hadir',
                         'terlambat' => 'Terlambat',

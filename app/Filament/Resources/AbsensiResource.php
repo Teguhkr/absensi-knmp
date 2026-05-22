@@ -85,15 +85,17 @@ class AbsensiResource extends Resource
                 Tables\Columns\TextColumn::make('jam_pulang')
                     ->label('Jam Pulang')
                     ->time('H:i'),
-                Tables\Columns\BadgeColumn::make('status')
+                Tables\Columns\TextColumn::make('status')
                     ->label('Status')
-                    ->colors([
-                        'success' => 'hadir',
-                        'warning' => 'terlambat',
-                        'info'    => 'izin',
-                        'warning' => 'sakit',
-                        'danger'  => 'alpha',
-                    ])
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'hadir'     => 'success',
+                        'terlambat' => 'warning',
+                        'izin'      => 'info',
+                        'sakit'     => 'warning',
+                        'alpha'     => 'danger',
+                        default     => 'gray',
+                    })
                     ->formatStateUsing(fn ($state) => match($state) {
                         'hadir'     => 'Hadir',
                         'terlambat' => 'Terlambat',
