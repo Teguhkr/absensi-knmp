@@ -1,59 +1,140 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🕒 Absensi KNMP - Sistem Presensi Karyawan Modern
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Presensi Karyawan (Absensi) berbasis web dan QR Code yang dirancang secara modern dan responsif menggunakan **Laravel 11** dan **Filament PHP v3**. Sistem ini dilengkapi fitur keamanan ganda berupa validasi lokasi berbasis **GPS Geofencing (Radius Kantor)** dan pencatatan kehadiran menggunakan **QR Code scanner**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 👥 Peran & Panel Pengguna
+*   **Admin Panel (HRD / Manajemen)**:
+    *   **Dashboard Kehadiran**: Visualisasi statistik kehadiran hari ini, grafik tren kehadiran bulanan, serta daftar presensi terbaru.
+    *   **Manajemen Pegawai**: Mengelola data akun pegawai (tambah, edit, nonaktifkan, generate QR Token otomatis).
+    *   **Rekapitulasi Absensi**: Memantau, mengoreksi, dan mengekspor seluruh riwayat kehadiran pegawai.
+    *   **Manajemen Izin & Cuti**: Sistem verifikasi persetujuan (Approve/Reject) pengajuan izin sakit, cuti, maupun dinas luar.
+    *   **Papan Pengumuman**: Menyebarluaskan pengumuman atau informasi instansi kepada seluruh dashboard pegawai.
+    *   **Pengaturan Sistem**: Konfigurasi instansi secara dinamis (jam kerja, toleransi terlambat, koordinat kantor, radius presensi, dan status validasi GPS).
+*   **Pegawai Panel (Karyawan)**:
+    *   **Presensi Mandiri**: Tombol cepat untuk *Absen Masuk* dan *Absen Pulang* yang terintegrasi dengan deteksi lokasi perangkat.
+    *   **Pengajuan Izin**: Mengajukan surat izin atau cuti secara mandiri dengan lampiran alasan/dokumen pendukung.
+    *   **Riwayat Presensi**: Melihat rekapan riwayat kehadiran pribadi dari hari ke hari lengkap dengan statusnya.
+    *   **Widget Pengumuman**: Widget info terbaru langsung di dashboard pegawai.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 📍 GPS Geofencing (Validasi Radius)
+*   Menghitung jarak koordinat pegawai dengan koordinat kantor secara presisi menggunakan **Formula Haversine**.
+*   Pegawai hanya dapat melakukan absensi jika berada di dalam radius kantor yang telah ditentukan oleh Admin (misal: 500 meter).
+*   Fitur validasi GPS dapat dinonaktifkan secara fleksibel melalui panel pengaturan admin jika diperlukan.
 
-## Learning Laravel
+### 🔍 Presensi Berbasis QR Code
+*   Setiap pegawai mendapatkan QR Code unik dengan token terenkripsi.
+*   Presensi dapat dilakukan dengan memindai (scan) QR Code pegawai pada pos atau perangkat pemindai yang ditunjuk instansi tanpa harus login ke akun masing-masing.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Spesifikasi Teknologi (Tech Stack)
 
-## Laravel Sponsors
+*   **Backend Framework**: [Laravel 11.x](https://laravel.com)
+*   **Admin Panel / UI Engine**: [Filament v3](https://filamentphp.com) (TALL Stack: Tailwind CSS, Alpine.js, Laravel, Livewire)
+*   **Database**: MySQL / MariaDB (Dukungan SQLite untuk lokal)
+*   **Frontend Tooling**: Vite & Tailwind CSS
+*   **Lokasi & Geolocation**: HTML5 Geolocation API
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## ⚙️ Panduan Instalasi Lokal
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Ikuti langkah-langkah di bawah ini untuk menjalankan project ini di komputer lokal Anda:
 
-## Contributing
+### 1. Prasyarat Sistem
+Pastikan perangkat Anda sudah terinstall:
+*   PHP >= 8.2
+*   Composer (Dependency Manager)
+*   Node.js & NPM
+*   Database Server (MySQL / MariaDB)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 2. Kloning Repositori
+```bash
+git clone https://github.com/Teguhkr/absensi-knmp.git
+cd absensi-knmp
+```
 
-## Code of Conduct
+### 3. Install Dependensi PHP
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Install Dependensi Javascript & Aset Frontend
+```bash
+npm install
+npm run dev
+```
 
-## Security Vulnerabilities
+### 5. Salin dan Sesuaikan Konfigurasi `.env`
+Salin file `.env.example` ke `.env`:
+```bash
+cp .env.example .env
+```
+Buka file `.env` yang baru dibuat dan sesuaikan konfigurasi database Anda:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=absensi_knmp
+DB_USERNAME=username_database_anda
+DB_PASSWORD=password_database_anda
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 6. Buat Kunci Aplikasi & Link Storage
+```bash
+php artisan key:generate
+php artisan storage:link
+```
 
-## License
+### 7. Jalankan Migrasi & Database Seeder
+Jalankan perintah berikut untuk membuat tabel dan mengisi data awal (default akun demo & pengaturan sistem):
+```bash
+php artisan migrate --seed
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 8. Jalankan Server Lokal
+```bash
+php artisan serve
+```
+Aplikasi sekarang dapat diakses melalui browser di alamat [http://127.0.0.1:8000](http://127.0.0.1:8000).
+
+---
+
+## 🔑 Akun Uji Coba (Demo Accounts)
+
+Setelah menjalankan perintah `db:seed`, Anda dapat masuk dengan akun-akun berikut:
+
+### Akun Administrator (Akses Admin Panel)
+*   **URL**: `http://127.0.0.1:8000/admin`
+*   **Email**: `teguhk356@gmail.com`
+*   **Password**: `password`
+
+### Akun Karyawan / Pegawai (Akses Pegawai Panel)
+*   **URL**: `http://127.0.0.1:8000/pegawai`
+*   **Password Default**: `password`
+*   **Daftar Akun Pegawai**:
+    | Nama Pegawai | Email | NIP | Departemen |
+    | :--- | :--- | :--- | :--- |
+    | Budi Santoso | `budi@knmp.go.id` | 198501012010011001 | Bidang Perikanan |
+    | Siti Rahayu | `siti@knmp.go.id` | 199003152012012002 | Bidang Umum |
+    | Agus Hermawan | `agus@knmp.go.id` | 198712052011011003 | Bidang Perikanan |
+
+---
+
+## 🗺️ Skema Aturan Jam Kerja & Presensi
+
+Secara default (bisa diubah dari halaman **Pengaturan Sistem** di Admin Panel):
+1.  **Jam Masuk**: `08:00`
+2.  **Jam Pulang**: `16:00`
+3.  **Toleransi Keterlambatan**: `15 Menit` (Karyawan melakukan absen setelah pukul `08:15` akan otomatis ditandai sebagai **Terlambat**).
+4.  **Radius Lokasi**: `500 Meter` dari koordinat latitude & longitude kantor.
+
+---
+
+## 🔒 Lisensi
+
+Project ini dilisensikan di bawah lisensi MIT. Silakan gunakan dan sesuaikan untuk kebutuhan Anda.
