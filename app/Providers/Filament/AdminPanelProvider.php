@@ -30,9 +30,11 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::hex('#003F8A'),
+                'primary' => Color::hex('#0B3B60'),
             ])
             ->brandName('KNMP | Panel Admin')
+            ->brandLogo(asset('logo-knmp.png'))
+            ->brandLogoHeight('2.5rem')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

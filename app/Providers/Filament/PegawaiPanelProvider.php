@@ -25,9 +25,11 @@ class PegawaiPanelProvider extends PanelProvider
             ->path('pegawai')
             ->login()
             ->colors([
-                'primary' => Color::Teal,
+                'primary' => Color::hex('#0B3B60'),
             ])
             ->brandName('Absensi KNMP')
+            ->brandLogo(asset('logo-knmp.png'))
+            ->brandLogoHeight('2.5rem')
             ->discoverResources(in: app_path('Filament/Pegawai/Resources'), for: 'App\\Filament\\Pegawai\\Resources')
             ->discoverPages(in: app_path('Filament/Pegawai/Pages'), for: 'App\\Filament\\Pegawai\\Pages')
             ->discoverWidgets(in: app_path('Filament/Pegawai/Widgets'), for: 'App\\Filament\\Pegawai\\Widgets')
