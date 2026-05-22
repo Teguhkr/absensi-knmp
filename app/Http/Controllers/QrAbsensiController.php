@@ -20,7 +20,29 @@ class QrAbsensiController extends Controller
 
         $absensiHariIni = Absensi::getAbsensiHariIni($pegawai->id);
 
-        return view('absensi.scan', compact('pegawai', 'absensiHariIni'));
+        $warningPulangCepat = null;
+        if ($absensiHariIni && $absensiHariIni->jam_masuk && !$absensiHariIni->jam_pulang) {
+            $now = Carbon::now();
+            $jamMasuk = Carbon::createFromTimeString($absensiHariIni->jam_masuk);
+            $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
+            $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'));
+            
+            $durasiStandarMenit = $jamMasukStandar->diffInMinutes($jamPulangStandar);
+            $durasiAktualMenit = $jamMasuk->diffInMinutes($now);
+            
+            if ($now->lessThan($jamPulangStandar) || ($durasiAktualMenit < $durasiStandarMenit)) {
+                $kurangMenit = $durasiStandarMenit - $durasiAktualMenit;
+                $jamKurang = floor($kurangMenit / 60);
+                $menitKurang = $kurangMenit % 60;
+                
+                $durasiAktualJam = floor($durasiAktualMenit / 60);
+                $durasiAktualSisaMenit = $durasiAktualMenit % 60;
+                
+                $warningPulangCepat = "Jam pulang standar adalah pukul " . $jamPulangStandar->format('H:i') . " (durasi minimal " . ($durasiStandarMenit/60) . " jam). Durasi kerja Anda baru {$durasiAktualJam} jam {$durasiAktualSisaMenit} menit (kurang {$jamKurang} jam {$menitKurang} menit). Apakah Anda yakin ingin pulang cepat?";
+            }
+        }
+
+        return view('absensi.scan', compact('pegawai', 'absensiHariIni', 'warningPulangCepat'));
     }
 
     public function processScan(Request $request, $token)
@@ -71,12 +93,30 @@ class QrAbsensiController extends Controller
                 return back()->with('error', 'Pegawai sudah melakukan absen pulang.');
             }
 
+            $jamMasuk = Carbon::createFromTimeString($absensiHariIni->jam_masuk);
+            $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
+            $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'));
+            
+            $durasiStandarMenit = $jamMasukStandar->diffInMinutes($jamPulangStandar);
+            $durasiAktualMenit = $jamMasuk->diffInMinutes($now);
+
+            $isPulangCepat = $now->lessThan($jamPulangStandar) || ($durasiAktualMenit < $durasiStandarMenit);
+            
+            $keteranganUpdate = $absensiHariIni->keterangan;
+            if ($isPulangCepat) {
+                $durasiAktualJam = floor($durasiAktualMenit / 60);
+                $durasiAktualSisaMenit = $durasiAktualMenit % 60;
+                $catatanPulangCepat = "Pulang Cepat (Durasi Kerja: {$durasiAktualJam} jam {$durasiAktualSisaMenit} menit)";
+                $keteranganUpdate = $keteranganUpdate ? $keteranganUpdate . '; ' . $catatanPulangCepat : $catatanPulangCepat;
+            }
+
             $absensiHariIni->update([
                 'jam_pulang' => $now->toTimeString(),
                 'qr_scan_pulang' => true,
+                'keterangan' => $keteranganUpdate,
             ]);
 
-            return back()->with('success', 'Absen pulang berhasil direkam.');
+            return back()->with('success', 'Absen pulang berhasil direkam.' . ($isPulangCepat ? ' (Dicatat Pulang Cepat)' : ''));
         }
 
         return back()->with('error', 'Aksi tidak valid.');

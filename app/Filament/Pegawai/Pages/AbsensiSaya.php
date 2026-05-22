@@ -22,6 +22,8 @@ class AbsensiSaya extends Page
     public $keterangan;
     public $statusAbsenSekarang = 'Belum Absen';
     public $absensiHariIni;
+    public $confirmPulangCepat = false;
+    public $pesanPeringatanPulang = '';
 
     public function mount()
     {
@@ -79,7 +81,7 @@ class AbsensiSaya extends Page
         $this->keterangan = '';
     }
 
-    public function absenPulang()
+    public function absenPulang($force = false)
     {
         if (!$this->validateGps()) {
             return;
@@ -96,14 +98,45 @@ class AbsensiSaya extends Page
         }
 
         $now = Carbon::now();
+        $jamMasuk = Carbon::createFromTimeString($this->absensiHariIni->jam_masuk);
+        $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
+        $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'));
+        
+        $durasiStandarMenit = $jamMasukStandar->diffInMinutes($jamPulangStandar);
+        $durasiAktualMenit = $jamMasuk->diffInMinutes($now);
+
+        $isPulangCepat = $now->lessThan($jamPulangStandar) || ($durasiAktualMenit < $durasiStandarMenit);
+
+        if ($isPulangCepat && !$force) {
+            $kurangMenit = $durasiStandarMenit - $durasiAktualMenit;
+            $jamKurang = floor($kurangMenit / 60);
+            $menitKurang = $kurangMenit % 60;
+            
+            $durasiAktualJam = floor($durasiAktualMenit / 60);
+            $durasiAktualSisaMenit = $durasiAktualMenit % 60;
+
+            $this->pesanPeringatanPulang = "Jam pulang standar adalah pukul " . $jamPulangStandar->format('H:i') . " (durasi minimal " . ($durasiStandarMenit/60) . " jam). Durasi kerja Anda baru {$durasiAktualJam} jam {$durasiAktualSisaMenit} menit (kurang {$jamKurang} jam {$menitKurang} menit). Apakah Anda yakin ingin pulang cepat?";
+            $this->confirmPulangCepat = true;
+            return;
+        }
+
+        $keteranganUpdate = $this->absensiHariIni->keterangan;
+        if ($isPulangCepat) {
+            $durasiAktualJam = floor($durasiAktualMenit / 60);
+            $durasiAktualSisaMenit = $durasiAktualMenit % 60;
+            $catatanPulangCepat = "Pulang Cepat (Durasi Kerja: {$durasiAktualJam} jam {$durasiAktualSisaMenit} menit)";
+            $keteranganUpdate = $keteranganUpdate ? $keteranganUpdate . '; ' . $catatanPulangCepat : $catatanPulangCepat;
+        }
 
         $this->absensiHariIni->update([
             'jam_pulang' => $now->toTimeString(),
             'latitude_pulang' => $this->latitude,
             'longitude_pulang' => $this->longitude,
+            'keterangan' => $keteranganUpdate,
         ]);
 
-        Notification::make()->success()->title('Absen Pulang Berhasil!')->send();
+        Notification::make()->success()->title('Absen Pulang Berhasil!' . ($isPulangCepat ? ' (Dicatat Pulang Cepat)' : ''))->send();
+        $this->confirmPulangCepat = false;
         $this->loadAbsensiHariIni();
     }
 

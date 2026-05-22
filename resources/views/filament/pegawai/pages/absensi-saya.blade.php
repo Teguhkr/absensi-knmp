@@ -28,9 +28,29 @@
                         Absen Masuk Sekarang
                     </x-filament::button>
                 @elseif($statusAbsenSekarang == 'Sudah Masuk')
-                    <x-filament::button size="lg" color="danger" class="w-full" wire:click="absenPulang" id="btn-pulang">
-                        Absen Pulang Sekarang
-                    </x-filament::button>
+                    @if($confirmPulangCepat)
+                        <div class="w-full p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg text-amber-800 dark:text-amber-300 text-sm space-y-3">
+                            <div class="flex items-start">
+                                <svg class="w-5 h-5 mr-2 shrink-0 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                <div>
+                                    <p class="font-semibold text-left">Peringatan Pulang Cepat</p>
+                                    <p class="mt-1 text-left">{{ $pesanPeringatanPulang }}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 justify-end">
+                                <x-filament::button size="xs" color="gray" wire:click="$set('confirmPulangCepat', false)">
+                                    Batal
+                                </x-filament::button>
+                                <x-filament::button size="xs" color="warning" wire:click="absenPulang(true)">
+                                    Ya, Tetap Pulang
+                                </x-filament::button>
+                            </div>
+                        </div>
+                    @else
+                        <x-filament::button size="lg" color="danger" class="w-full" wire:click="absenPulang" id="btn-pulang">
+                            Absen Pulang Sekarang
+                        </x-filament::button>
+                    @endif
                 @else
                     <div class="w-full text-center p-3 bg-success-100 text-success-700 rounded-lg font-medium">
                         Anda sudah menyelesaikan absensi hari ini. Terima kasih!
