@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AbsensiSaya extends Page
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-finger-print';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-finger-print';
     protected static ?string $navigationLabel = 'Absensi Mandiri';
     protected static ?string $title = 'Absensi Mandiri';
     protected string $view = 'filament.pegawai.pages.absensi-saya';
@@ -31,7 +31,7 @@ class AbsensiSaya extends Page
     public function loadAbsensiHariIni()
     {
         $this->absensiHariIni = Absensi::getAbsensiHariIni(Auth::id());
-        
+
         if ($this->absensiHariIni) {
             if ($this->absensiHariIni->jam_pulang) {
                 $this->statusAbsenSekarang = 'Sudah Pulang';
@@ -55,22 +55,22 @@ class AbsensiSaya extends Page
         $now = Carbon::now();
         $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
         $toleransi = (int) PengaturanSistem::get('toleransi_menit', 15);
-        
+
         $batasTerlambat = $jamMasukStandar->copy()->addMinutes($toleransi);
-        
+
         $status = $now->greaterThan($batasTerlambat) ? 'terlambat' : 'hadir';
 
         Absensi::updateOrCreate(
             [
-                'user_id'        => Auth::id(),
-                'tanggal'        => $now->toDateString(),
+                'user_id' => Auth::id(),
+                'tanggal' => $now->toDateString(),
             ],
             [
-                'jam_masuk'      => $now->toTimeString(),
+                'jam_masuk' => $now->toTimeString(),
                 'latitude_masuk' => $this->latitude,
-                'longitude_masuk'=> $this->longitude,
-                'status'         => $status,
-                'keterangan'     => $this->keterangan,
+                'longitude_masuk' => $this->longitude,
+                'status' => $status,
+                'keterangan' => $this->keterangan,
             ]
         );
 
@@ -116,7 +116,7 @@ class AbsensiSaya extends Page
             return false;
         }
 
-        if ($validasiGps && !PengaturanSistem::dalamRadius((float)$this->latitude, (float)$this->longitude)) {
+        if ($validasiGps && !PengaturanSistem::dalamRadius((float) $this->latitude, (float) $this->longitude)) {
             Notification::make()->danger()->title('Anda berada di luar radius kantor yang diizinkan!')->send();
             return false;
         }
