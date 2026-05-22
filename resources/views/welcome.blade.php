@@ -26,7 +26,6 @@
 
             <!-- Kanan: Logo KKP & Ekonomi Biru -->
             <div class="flex items-center space-x-3 sm:space-x-4">
-                <img src="{{ asset('Logo KKP Pangan Biru Putih.png') }}" alt="Logo KKP" class="h-10 sm:h-12 w-auto object-contain">
                 <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
                 <div class="bg-[#0B3B60] p-1 rounded-lg flex items-center justify-center">
                     <img src="{{ asset('Ekonomi Biru untuk Indonesia Emas (Putih).png') }}" alt="Logo Ekonomi Biru" class="h-8 sm:h-10 w-auto object-contain">
