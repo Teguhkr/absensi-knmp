@@ -139,7 +139,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="mb-1">&copy; {{ date('Y') }} Kampus Nusantara Maritim Patimban (KNMP) - Kementerian Kelautan dan Perikanan.</p>
+            <p class="mb-1">&copy; {{ date('Y') }} Kampung Nelayan Merah Putih (KNMP) - Kementerian Kelautan dan Perikanan.</p>
             <p>Hak Cipta Dilindungi.</p>
         </div>
     </footer>
