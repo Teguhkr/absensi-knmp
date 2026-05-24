@@ -24,10 +24,16 @@ class AbsensiSaya extends Page
     public $absensiHariIni;
     public $confirmPulangCepat = false;
     public $pesanPeringatanPulang = '';
+    public $kantorLatitude;
+    public $kantorLongitude;
+    public $radiusAbsensi;
 
     public function mount()
     {
         $this->loadAbsensiHariIni();
+        $this->kantorLatitude = (float) PengaturanSistem::get('kantor_latitude', 0);
+        $this->kantorLongitude = (float) PengaturanSistem::get('kantor_longitude', 0);
+        $this->radiusAbsensi = (float) PengaturanSistem::get('radius_absensi', 500);
     }
 
     public function loadAbsensiHariIni()

@@ -51,7 +51,7 @@
                     Sistem Informasi <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#0B3B60] to-blue-500">Absensi Pegawai</span>
                 </h1>
                 <p class="mt-4 text-base md:text-lg text-slate-600 font-normal leading-relaxed">
-                    Portal Layanan Presensi Kampus Nelayan Merah Putih (KNMP) untuk Pegawai dan Administrator.
+                    Portal Layanan Presensi Kampung Nelayan Merah Putih (KNMP) untuk Pegawai dan Administrator.
                 </p>
             </div>
 

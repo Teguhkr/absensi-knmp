@@ -22,7 +22,7 @@
                 <img src="{{ asset('logo-knmp.png') }}" alt="Logo KNMP" class="h-12 w-auto object-contain">
                 <div class="hidden md:block">
                     <span class="text-sm font-bold text-slate-800 tracking-wide uppercase block">Absensi KNMP</span>
-                    <span class="text-[10px] text-slate-500 font-semibold tracking-wider uppercase block">Kampus Nusantara Maritim Patimban</span>
+                    <span class="text-[10px] text-slate-500 font-semibold tracking-wider uppercase block">Kampung Nelayan Merah Putih</span>
                 </div>
             </a>
 
@@ -137,7 +137,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="mb-1">&copy; {{ date('Y') }} Kampus Nelayan Merah Putih (KNMP) - Kementerian Kelautan dan Perikanan.</p>
+            <p class="mb-1">&copy; {{ date('Y') }} Kampung Nelayan Merah Putih (KNMP) - Kementerian Kelautan dan Perikanan.</p>
             <p>Hak Cipta Dilindungi.</p>
         </div>
     </footer>
