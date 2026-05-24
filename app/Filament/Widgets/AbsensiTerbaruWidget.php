@@ -10,7 +10,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class AbsensiTerbaruWidget extends BaseWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 4;
     protected int | string | array $columnSpan = 'full';
     protected static ?string $heading = 'Absensi Terbaru Hari Ini';
 

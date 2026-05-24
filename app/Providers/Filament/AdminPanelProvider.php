@@ -3,7 +3,9 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Widgets\AbsensiTerbaruWidget;
+use App\Filament\Widgets\DashboardHeaderWidget;
 use App\Filament\Widgets\GrafikKehadiranWidget;
+use App\Filament\Widgets\RasioKehadiranHariIniWidget;
 use App\Filament\Widgets\StatistikHariIniWidget;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -51,8 +53,10 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
+                DashboardHeaderWidget::class,
                 StatistikHariIniWidget::class,
                 GrafikKehadiranWidget::class,
+                RasioKehadiranHariIniWidget::class,
                 AbsensiTerbaruWidget::class,
             ])
             ->middleware([

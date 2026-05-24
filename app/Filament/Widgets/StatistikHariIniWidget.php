@@ -31,22 +31,26 @@ class StatistikHariIniWidget extends BaseWidget
             Stat::make('Total Pegawai', $totalPegawai)
                 ->description('Pegawai aktif')
                 ->descriptionIcon('heroicon-m-users')
-                ->color('primary'),
+                ->color('primary')
+                ->extraAttributes(['class' => 'stat-card-premium stat-total-pegawai']),
                 
             Stat::make('Kehadiran Hari Ini', $totalHadir)
                 ->description($hadir . ' Tepat waktu, ' . $terlambat . ' Terlambat')
                 ->descriptionIcon('heroicon-m-check-circle')
-                ->color('success'),
+                ->color('success')
+                ->extraAttributes(['class' => 'stat-card-premium stat-kehadiran']),
                 
             Stat::make('Izin / Sakit', $izin)
                 ->description('Pegawai izin/sakit')
                 ->descriptionIcon('heroicon-m-clipboard-document-list')
-                ->color('warning'),
+                ->color('warning')
+                ->extraAttributes(['class' => 'stat-card-premium stat-izin']),
                 
             Stat::make('Tingkat Kehadiran', $persentase . '%')
                 ->description($alpha . ' Pegawai Alpha')
                 ->descriptionIcon('heroicon-m-chart-bar')
-                ->color($persentase >= 80 ? 'success' : 'danger'),
+                ->color($persentase >= 80 ? 'success' : 'danger')
+                ->extraAttributes(['class' => 'stat-card-premium stat-tingkat-kehadiran']),
         ];
     }
 }

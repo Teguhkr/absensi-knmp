@@ -741,3 +741,320 @@
     .knmp-field-label { font-size: 9px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
     .knmp-field-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.92); }
     .knmp-field-role { font-size: 12px; font-weight: 500; color: #7dd3fc; text-align: right; }
+
+/* ==========================================================================
+   ADMIN DASHBOARD PREMIUM STYLING (MATCHING ABSENSI SAYA THEME)
+   ========================================================================== */
+
+/* 1. Dashboard Banner / Header Widget */
+.dashboard-banner {
+    background: linear-gradient(135deg, #0B3B60 0%, #114674 50%, #185280 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 24px 30px;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 25px -5px rgba(11, 59, 96, 0.25), 0 8px 10px -6px rgba(11, 59, 96, 0.15);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-banner::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.dashboard-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: -40px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.banner-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.banner-greeting h1 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+    color: #ffffff;
+}
+
+.banner-greeting p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 580px;
+    line-height: 1.45;
+}
+
+.banner-clock-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .banner-body {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .banner-clock-section {
+        align-items: flex-start;
+        width: 100%;
+    }
+}
+
+.banner-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.825rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+}
+
+.banner-icon {
+    width: 16px;
+    height: 16px;
+    color: #38bdf8;
+}
+
+.banner-clock-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.55);
+    border-radius: 12px;
+    padding: 8px 20px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+#dashboard-clock {
+    font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #38bdf8;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+}
+
+/* 2. Premium Stat Cards (StatistikHariIniWidget) */
+.stat-card-premium {
+    border-radius: 18px !important;
+    border: 1px solid rgba(229, 231, 235, 0.5) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 8px -1px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    overflow: hidden;
+    background: #ffffff !important;
+    position: relative;
+}
+
+.dark .stat-card-premium {
+    background: rgba(24, 24, 27, 0.75) !important;
+    border-color: rgba(63, 63, 70, 0.5) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.stat-card-premium:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 24px -8px rgba(11, 59, 96, 0.15) !important;
+    border-color: rgba(11, 59, 96, 0.25) !important;
+}
+
+.dark .stat-card-premium:hover {
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.6) !important;
+    border-color: rgba(11, 59, 96, 0.4) !important;
+}
+
+/* Top Border Color Accent Bars */
+.stat-card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    transition: height 0.25s ease;
+}
+
+.stat-total-pegawai::before {
+    background: linear-gradient(90deg, #0B3B60, #185280);
+}
+
+.stat-kehadiran::before {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.stat-izin::before {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.stat-tingkat-kehadiran::before {
+    background: linear-gradient(90deg, #0ea5e9, #0284c7);
+}
+
+.stat-card-premium:hover::before {
+    height: 6px;
+}
+
+/* Value & Label Typography */
+.stat-card-premium dt,
+.stat-card-premium dd,
+.stat-card-premium .fi-wi-stats-overview-stat-value,
+.stat-card-premium [class*="stat-value"] {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 2.1rem !important;
+    letter-spacing: -0.03em !important;
+    margin-top: 4px;
+}
+
+.stat-card-premium .fi-wi-stats-overview-stat-label,
+.stat-card-premium [class*="stat-label"] {
+    font-weight: 650 !important;
+    font-size: 0.875rem !important;
+    color: #4b5563 !important;
+}
+
+.dark .stat-card-premium .fi-wi-stats-overview-stat-label,
+.dark .stat-card-premium [class*="stat-label"] {
+    color: #a1a1aa !important;
+}
+
+.stat-card-premium .fi-wi-stats-overview-stat-description,
+.stat-card-premium [class*="stat-description"] {
+    font-size: 0.775rem !important;
+    font-weight: 500 !important;
+    color: #64748b !important;
+}
+
+.dark .stat-card-premium .fi-wi-stats-overview-stat-description,
+.dark .stat-card-premium [class*="stat-description"] {
+    color: #94a3b8 !important;
+}
+
+/* 3. Chart Card Styling (GrafikKehadiranWidget) */
+.fi-wi-widget.fi-wi-chart-card,
+.fi-wi-chart-card,
+section.fi-wi-widget {
+    border-radius: 18px !important;
+    border: 1px solid rgba(229, 231, 235, 0.5) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03) !important;
+    background: #ffffff !important;
+    transition: all 0.35s ease !important;
+    overflow: hidden !important;
+}
+
+.dark .fi-wi-widget.fi-wi-chart-card,
+.dark .fi-wi-chart-card,
+.dark section.fi-wi-widget {
+    background: rgba(24, 24, 27, 0.75) !important;
+    border-color: rgba(63, 63, 70, 0.5) !important;
+}
+
+.fi-wi-widget.fi-wi-chart-card:hover,
+.fi-wi-chart-card:hover,
+section.fi-wi-widget:hover {
+    box-shadow: 0 12px 24px -8px rgba(11, 59, 96, 0.12) !important;
+    border-color: rgba(11, 59, 96, 0.2) !important;
+}
+
+.fi-wi-chart-card .fi-section-header-title,
+.fi-wi-chart-card h3,
+section.fi-wi-widget .fi-section-header-title {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0B3B60 !important;
+    font-size: 1.05rem !important;
+}
+
+.dark .fi-wi-chart-card .fi-section-header-title,
+.dark .fi-wi-chart-card h3,
+.dark section.fi-wi-widget .fi-section-header-title {
+    color: #ffffff !important;
+}
+
+/* 4. Table Card Styling (AbsensiTerbaruWidget) */
+.fi-wi-widget.fi-ta-ctn,
+.fi-ta-ctn,
+.fi-wi-table {
+    border-radius: 18px !important;
+    border: 1px solid rgba(229, 231, 235, 0.5) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03) !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+    transition: all 0.35s ease !important;
+}
+
+.dark .fi-wi-widget.fi-ta-ctn,
+.dark .fi-ta-ctn,
+.dark .fi-wi-table {
+    background: rgba(24, 24, 27, 0.75) !important;
+    border-color: rgba(63, 63, 70, 0.5) !important;
+}
+
+.fi-wi-widget.fi-ta-ctn:hover,
+.fi-ta-ctn:hover,
+.fi-wi-table:hover {
+    box-shadow: 0 12px 24px -8px rgba(11, 59, 96, 0.12) !important;
+    border-color: rgba(11, 59, 96, 0.2) !important;
+}
+
+.fi-ta-header-cell {
+    background-color: #f8fafc !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 14px 16px !important;
+    border-bottom: 2px solid #edf2f7 !important;
+}
+
+.dark .fi-ta-header-cell {
+    background-color: #1e293b !important;
+    color: #94a3b8 !important;
+    border-bottom: 2px solid #334155 !important;
+}
+
+.fi-ta-row {
+    transition: background-color 0.2s ease !important;
+}
+
+.fi-ta-row:hover {
+    background-color: rgba(11, 59, 96, 0.02) !important;
+}
+
+.dark .fi-ta-row:hover {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+.fi-ta-cell {
+    padding: 14px 16px !important;
+}
