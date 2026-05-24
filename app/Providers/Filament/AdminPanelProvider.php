@@ -37,6 +37,12 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('2.5rem')
             ->font('Plus Jakarta Sans')
             ->sidebarCollapsibleOnDesktop()
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn () => new \Illuminate\Support\HtmlString('
+                    <link rel="stylesheet" href="' . asset('css/custom-filament.css') . '">
+                ')
+            )
             ->profile(\App\Filament\Pages\Auth\EditProfile::class)
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

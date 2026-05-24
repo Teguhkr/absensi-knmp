@@ -1,0 +1,580 @@
+/* Premium Filament UI/UX Stylesheet */
+
+/* 1. Hide Desktop Topbar Collapse Button */
+.fi-topbar-collapse-sidebar-btn-ctn {
+    display: none !important;
+}
+
+/* 2. Glassmorphism Topbar */
+.fi-topbar {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5) !important;
+}
+
+.dark .fi-topbar {
+    background-color: rgba(9, 9, 11, 0.6) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(63, 63, 70, 0.4) !important;
+}
+
+/* 3. Premium Sidebar & Nav Item Styling */
+.fi-sidebar {
+    border-right: 1px solid rgba(229, 231, 235, 0.5) !important;
+    background-color: rgba(249, 250, 251, 0.8) !important;
+}
+
+.dark .fi-sidebar {
+    border-right: 1px solid rgba(63, 63, 70, 0.3) !important;
+    background-color: rgba(9, 9, 11, 0.8) !important;
+}
+
+.fi-sidebar-item-btn {
+    border-radius: 12px !important;
+    margin: 2px 8px !important;
+    padding: 10px 14px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Hover state */
+.fi-sidebar-item-btn:hover {
+    background-color: rgba(11, 59, 96, 0.08) !important;
+    transform: translateX(4px);
+}
+
+.dark .fi-sidebar-item-btn:hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Active Item Style */
+.fi-sidebar-item.fi-active .fi-sidebar-item-btn {
+    background: linear-gradient(135deg, #0B3B60, #185280) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(11, 59, 96, 0.3) !important;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-icon {
+    color: #ffffff !important;
+}
+
+/* 4. Stats Overview Card & Widgets */
+.fi-wi-stats-overview-stat-card {
+    border-radius: 18px !important;
+    border: 1px solid rgba(229, 231, 235, 0.5) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 2px 8px -1px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    overflow: hidden;
+    background: #ffffff !important;
+}
+
+.dark .fi-wi-stats-overview-stat-card {
+    background: rgba(24, 24, 27, 0.7) !important;
+    border-color: rgba(63, 63, 70, 0.5) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.fi-wi-stats-overview-stat-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 24px -8px rgba(11, 59, 96, 0.15) !important;
+    border-color: rgba(11, 59, 96, 0.25) !important;
+}
+
+.dark .fi-wi-stats-overview-stat-card:hover {
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.6) !important;
+    border-color: rgba(11, 59, 96, 0.4) !important;
+}
+
+/* 5. Custom Sidebar Collapse Button Specific styles */
+.fi-sidebar-custom-toggle-btn {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 16px) !important;
+    margin: 8px !important;
+    border-radius: 12px !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    color: #4b5563 !important;
+    cursor: pointer;
+}
+
+.dark .fi-sidebar-custom-toggle-btn {
+    color: #a1a1aa !important;
+}
+
+.fi-sidebar-custom-toggle-btn:hover {
+    background-color: rgba(11, 59, 96, 0.08) !important;
+    color: #0b3b60 !important;
+}
+
+.dark .fi-sidebar-custom-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    color: #ffffff !important;
+}
+
+/* Custom ID Badge Card for Employees */
+.knmp-badge-card {
+    background: linear-gradient(135deg, #092e4b 0%, #154c75 100%);
+    box-shadow: 0 8px 30px rgba(11, 59, 96, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.knmp-badge-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.knmp-badge-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+/* Neon Digital Clock Widget */
+.digital-clock-container {
+    background: linear-gradient(145deg, #090e14, #121c27);
+    border: 1px solid rgba(11, 59, 96, 0.4);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(11, 59, 96, 0.15);
+    border-radius: 16px;
+    padding: 18px 24px;
+    display: inline-block;
+    min-width: 220px;
+}
+
+.neon-time {
+    color: #38bdf8;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.6), 0 0 20px rgba(56, 189, 248, 0.3);
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* Modern Pulse Animation for Check-In */
+@keyframes soft-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+.btn-masuk-pulse {
+    animation: soft-pulse 2s infinite;
+}
+
+/* Smooth Transition for Collapsed Sidebar */
+.fi-sidebar-item-label {
+    transition: opacity 0.2s ease-in-out !important;
+}
+
+/* ===== Layout Utama ===== */
+.absensi-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* ===== Card Wrapper ===== */
+.absensi-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.dark .absensi-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+.absensi-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #fafafa;
+}
+
+.dark .absensi-card-header {
+    border-bottom-color: #334155;
+    background: #1a2535;
+}
+
+.absensi-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+/* ===== Digital Clock ===== */
+.clock-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    border-radius: 12px;
+    padding: 10px 28px;
+    border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+#clock {
+    font-family: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #34d399;
+    letter-spacing: 0.08em;
+    line-height: 1;
+}
+
+/* ===== Jam Masuk / Pulang ===== */
+.jam-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.dark .jam-grid {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(71, 85, 105, 0.4);
+}
+
+.jam-cell {
+    padding: 14px 8px;
+    text-align: center;
+}
+
+.jam-cell:first-child {
+    border-right: 1px solid #e2e8f0;
+}
+
+.dark .jam-cell:first-child {
+    border-right-color: rgba(71, 85, 105, 0.4);
+}
+
+.jam-label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.jam-value {
+    font-family: ui-monospace, monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* ===== Textarea ===== */
+.absensi-textarea {
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.875rem;
+    color: #374151;
+    background: #ffffff;
+    resize: none;
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+
+.dark .absensi-textarea {
+    background: #0f172a;
+    border-color: #475569;
+    color: #e2e8f0;
+}
+
+.absensi-textarea::placeholder {
+    color: #9ca3af;
+}
+
+.absensi-textarea:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+}
+
+/* ===== Tombol Absen ===== */
+.btn-absen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 13px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    color: white;
+    box-sizing: border-box;
+}
+
+.btn-absen:active {
+    transform: scale(0.98);
+}
+
+.btn-masuk {
+    background: linear-gradient(135deg, #10b981, #0d9488);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.btn-masuk:hover {
+    background: linear-gradient(135deg, #059669, #0f766e);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+}
+
+.btn-pulang {
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    box-shadow: 0 4px 14px rgba(244, 63, 94, 0.3);
+}
+
+.btn-pulang:hover {
+    background: linear-gradient(135deg, #e11d48, #be123c);
+    box-shadow: 0 6px 18px rgba(244, 63, 94, 0.4);
+}
+
+/* ===== Warn Box ===== */
+.warn-box {
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.dark .warn-box {
+    background: rgba(120, 53, 15, 0.15);
+    border-color: rgba(180, 83, 9, 0.3);
+}
+
+.warn-btn-row {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+/* ===== Selesai ===== */
+.selesai-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: 12px;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #059669;
+    font-weight: 600;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+}
+
+.dark .selesai-badge {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+/* ===== GPS Bar ===== */
+.gps-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-size: 0.7rem;
+    color: #94a3b8;
+    padding-top: 4px;
+}
+
+.gps-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0ea5e9;
+    animation: gps-blink 2s infinite;
+    flex-shrink: 0;
+}
+
+@keyframes gps-blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+/* ===== KNMP ID Card ===== */
+.knmp-card {
+    background: linear-gradient(145deg, #0f2744 0%, #0c1e3a 55%, #091629 100%);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 16px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 22px;
+    min-height: 370px;
+}
+
+.knmp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 14px;
+    margin-bottom: 4px;
+}
+
+.knmp-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.knmp-logo-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #0ea5e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: white;
+    flex-shrink: 0;
+}
+
+.knmp-brand-name {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.knmp-badge-aktif {
+    padding: 3px 10px;
+    background: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 99px;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    letter-spacing: 0.08em;
+}
+
+.knmp-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px 0;
+}
+
+.knmp-qr-wrapper {
+    background: white;
+    border-radius: 14px;
+    padding: 12px;
+    width: 164px;
+    height: 164px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.knmp-qr-wrapper:hover {
+    transform: scale(1.04);
+}
+
+.knmp-nip-label {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    font-weight: 600;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+.knmp-nip-value {
+    font-family: ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: #7dd3fc;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+.knmp-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.knmp-field-label {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 3px;
+}
+
+.knmp-field-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.knmp-field-role {
+    font-size: 12px;
+    font-weight: 500;
+    color: #7dd3fc;
+    text-align: right;
+}

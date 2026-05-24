@@ -32,6 +32,12 @@ class PegawaiPanelProvider extends PanelProvider
             ->brandLogoHeight('2.5rem')
             ->font('Plus Jakarta Sans')
             ->sidebarCollapsibleOnDesktop()
+            ->renderHook(
+                \Filament\View\PanelsRenderHook::HEAD_END,
+                fn () => new \Illuminate\Support\HtmlString('
+                    <link rel="stylesheet" href="' . asset('css/custom-filament.css') . '">
+                ')
+            )
             ->profile(\App\Filament\Pages\Auth\EditProfile::class)
             ->discoverResources(in: app_path('Filament/Pegawai/Resources'), for: 'App\\Filament\\Pegawai\\Resources')
             ->discoverPages(in: app_path('Filament/Pegawai/Pages'), for: 'App\\Filament\\Pegawai\\Pages')
