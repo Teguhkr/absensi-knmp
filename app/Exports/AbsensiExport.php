@@ -24,7 +24,7 @@ class AbsensiExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
     {
         return [
             'ID',
-            'NIP',
+            'NIK',
             'Nama Pegawai',
             'Departemen',
             'Tanggal',
@@ -39,7 +39,7 @@ class AbsensiExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
     {
         return [
             $absensi->id,
-            $absensi->user->nip ?? '-',
+            $absensi->user->nik ?? '-',
             $absensi->user->name ?? '-',
             $absensi->user->departemen ?? '-',
             $absensi->tanggal->format('d/m/Y'),

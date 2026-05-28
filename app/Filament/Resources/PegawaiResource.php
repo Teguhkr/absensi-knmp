@@ -48,8 +48,8 @@ class PegawaiResource extends Resource
 
             Section::make('Informasi Pegawai')
                 ->schema([
-                    Forms\Components\TextInput::make('nip')
-                        ->label('NIP')
+                    Forms\Components\TextInput::make('nik')
+                        ->label('NIK')
                         ->unique(ignoreRecord: true)
                         ->maxLength(50),
                     Forms\Components\Select::make('role')
@@ -100,8 +100,8 @@ class PegawaiResource extends Resource
                     ->disk('public')
                     ->circular()
                     ->defaultImageUrl(fn ($record) => 'https://ui-avatars.com/api/?name=' . urlencode($record->name) . '&background=0ea5e9&color=fff'),
-                Tables\Columns\TextColumn::make('nip')
-                    ->label('NIP')
+                Tables\Columns\TextColumn::make('nik')
+                    ->label('NIK')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')

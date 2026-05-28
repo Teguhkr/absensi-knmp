@@ -63,7 +63,8 @@
                         <div class="w-14 h-14 bg-gradient-to-br from-blue-50 to-blue-100 text-[#0B3B60] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition duration-300">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         </div>
-                        <h2 class="text-2xl font-bold text-slate-800 mb-3">Panel Pegawai</h2>
+                        <h2 class="text-2xl font-bold text-slate-800">Panel TA & TP</h2>
+                        <p class="text-slate-500 leading-relaxed mb-6 text-sm">(Tenaga Ahli & Tenaga Pendukung)</p>
                         <p class="text-slate-500 leading-relaxed mb-6 text-sm">Masuk untuk melakukan absensi harian (GPS & QR), memantau riwayat presensi, serta mengajukan izin atau sakit secara praktis.</p>
                         
                         <!-- List Fitur -->

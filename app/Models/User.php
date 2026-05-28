@@ -19,7 +19,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         'name',
         'email',
         'password',
-        'nip',
+        'nik',
         'role',
         'jabatan',
         'departemen',

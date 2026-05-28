@@ -142,7 +142,7 @@
             <span class="knmp-badge-aktif">AKTIF</span>
         </div>
 
-        {{-- QR + NIP --}}
+        {{-- QR + NIK --}}
         <div class="knmp-body">
             <div class="knmp-qr-wrapper">
                 <img
@@ -152,8 +152,8 @@
                 >
             </div>
             <div>
-                <p class="knmp-nip-label">Nomor Induk Pegawai</p>
-                <p class="knmp-nip-value">{{ auth()->user()->nip }}</p>
+                <p class="knmp-nip-label">Nomor Induk Kependudukan (NIK)</p>
+                <p class="knmp-nip-value">{{ auth()->user()->nik }}</p>
             </div>
         </div>
 

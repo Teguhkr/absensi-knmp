@@ -75,7 +75,7 @@
                          alt="Foto Profil">
                     <div class="overflow-hidden">
                         <h2 class="text-lg font-bold text-slate-800 truncate">{{ $pegawai->name }}</h2>
-                        <p class="text-slate-500 text-xs font-mono tracking-wider mt-0.5">{{ $pegawai->nip }}</p>
+                        <p class="text-slate-500 text-xs font-mono tracking-wider mt-0.5">{{ $pegawai->nik }}</p>
                         <span class="inline-flex px-2.5 py-0.5 bg-blue-50 text-[#0B3B60] border border-blue-100 text-[10px] font-bold rounded-full mt-1.5 uppercase tracking-wide">
                             {{ $pegawai->departemen ?? 'Pegawai' }}
                         </span>
