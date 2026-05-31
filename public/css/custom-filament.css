@@ -968,8 +968,18 @@ section.fi-wi-widget .fi-section-header-title {
     border: 1px solid rgba(229, 231, 235, 0.5) !important;
     box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03) !important;
     background: #ffffff !important;
-    overflow: hidden !important;
     transition: all 0.35s ease !important;
+}
+
+/* Override overflow for tables without header to allow filter dropdowns to show */
+.fi-ta-ctn:not(.fi-ta-ctn-with-header) {
+    overflow: visible !important;
+}
+
+/* Ensure filter dropdowns can extend beyond the table container */
+.fi-ta-filters-before-content-ctn,
+.fi-ta-filters-after-content-ctn {
+    overflow: visible !important;
 }
 
 .dark .fi-wi-widget.fi-ta-ctn,
