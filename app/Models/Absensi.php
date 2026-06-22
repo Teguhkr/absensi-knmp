@@ -46,6 +46,7 @@ class Absensi extends Model
             'izin'      => 'info',
             'sakit'     => 'warning',
             'alpha'     => 'danger',
+            'dinas'     => 'success',
             default     => 'gray',
         };
     }
@@ -58,6 +59,7 @@ class Absensi extends Model
             'izin'      => 'Izin',
             'sakit'     => 'Sakit',
             'alpha'     => 'Alpha',
+            'dinas'     => 'Dinas',
             default     => 'Unknown',
         };
     }

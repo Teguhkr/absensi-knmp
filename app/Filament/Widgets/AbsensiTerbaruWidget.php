@@ -41,6 +41,7 @@ class AbsensiTerbaruWidget extends BaseWidget
                         'info'    => 'izin',
                         'warning' => 'sakit',
                         'danger'  => 'alpha',
+                        'success' => 'dinas',
                     ])
                     ->formatStateUsing(fn ($state) => match($state) {
                         'hadir'     => 'Hadir',
@@ -48,7 +49,8 @@ class AbsensiTerbaruWidget extends BaseWidget
                         'izin'      => 'Izin',
                         'sakit'     => 'Sakit',
                         'alpha'     => 'Alpha',
-                        default     => $state,
+                        'dinas'     => 'Dinas',
+                        default     => ucfirst($state),
                     }),
             ])
             ->paginated(false);

@@ -30,7 +30,7 @@ class GrafikKehadiranWidget extends ChartWidget
             
             $hadirData[] = Absensi::whereDate('tanggal', $dateString)->where('status', 'hadir')->count();
             $terlambatData[] = Absensi::whereDate('tanggal', $dateString)->where('status', 'terlambat')->count();
-            $izinData[] = Absensi::whereDate('tanggal', $dateString)->whereIn('status', ['izin', 'sakit'])->count();
+            $izinData[] = Absensi::whereDate('tanggal', $dateString)->whereIn('status', ['izin', 'sakit', 'dinas'])->count();
         }
 
         return [
@@ -48,7 +48,7 @@ class GrafikKehadiranWidget extends ChartWidget
                     'borderColor' => '#f59e0b',
                 ],
                 [
-                    'label' => 'Izin / Sakit',
+                    'label' => 'Izin / Sakit / Dinas',
                     'data' => $izinData,
                     'backgroundColor' => '#0ea5e9', // sky blue
                     'borderColor' => '#0ea5e9',

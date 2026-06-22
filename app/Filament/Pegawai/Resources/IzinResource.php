@@ -35,8 +35,16 @@ class IzinResource extends Resource
                             ->options([
                                 'izin' => 'Izin',
                                 'sakit' => 'Sakit',
+                                'dinas' => 'Izin Dinas',
                             ])
+                            ->live()
                             ->required(),
+                        Forms\Components\TextInput::make('nomor_spt')
+                            ->label('Nomor SPT')
+                            ->placeholder('Masukkan nomor SPT...')
+                            ->required(fn ($get) => $get('jenis') === 'dinas')
+                            ->visible(fn ($get) => $get('jenis') === 'dinas')
+                            ->columnSpanFull(),
                         Forms\Components\DatePicker::make('tanggal_mulai')
                             ->label('Tanggal Mulai')
                             ->required()
@@ -50,7 +58,7 @@ class IzinResource extends Resource
                             ->required()
                             ->columnSpanFull(),
                         Forms\Components\FileUpload::make('lampiran')
-                            ->label('Lampiran (Surat Dokter/Bukti)')
+                            ->label('Lampiran (Surat/Bukti)')
                             ->disk('public')
                             ->directory('izin/lampiran')
                             ->acceptedFileTypes(['image/*', 'application/pdf'])
@@ -69,8 +77,21 @@ class IzinResource extends Resource
             ->columns([
                 Tables\Columns\BadgeColumn::make('jenis')
                     ->label('Jenis')
-                    ->colors(['info' => 'izin', 'warning' => 'sakit'])
-                    ->formatStateUsing(fn ($state) => ucfirst($state)),
+                    ->colors([
+                        'info' => 'izin',
+                        'warning' => 'sakit',
+                        'success' => 'dinas',
+                    ])
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'izin' => 'Izin',
+                        'sakit' => 'Sakit',
+                        'dinas' => 'Izin Dinas',
+                        default => ucfirst($state),
+                    }),
+                Tables\Columns\TextColumn::make('nomor_spt')
+                    ->label('Nomor SPT')
+                    ->placeholder('-')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('tanggal_mulai')
                     ->label('Mulai')
                     ->date('d M Y'),

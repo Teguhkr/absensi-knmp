@@ -52,6 +52,7 @@ class AbsensiResource extends Resource
                             'izin'      => 'Izin',
                             'sakit'     => 'Sakit',
                             'alpha'     => 'Alpha',
+                            'dinas'     => 'Dinas',
                         ])
                         ->required()
                         ->default('hadir'),
@@ -94,6 +95,7 @@ class AbsensiResource extends Resource
                         'izin'      => 'info',
                         'sakit'     => 'warning',
                         'alpha'     => 'danger',
+                        'dinas'     => 'success',
                         default     => 'gray',
                     })
                     ->formatStateUsing(fn ($state) => match($state) {
@@ -102,7 +104,8 @@ class AbsensiResource extends Resource
                         'izin'      => 'Izin',
                         'sakit'     => 'Sakit',
                         'alpha'     => 'Alpha',
-                        default     => $state,
+                        'dinas'     => 'Dinas',
+                        default     => ucfirst($state),
                     }),
                 Tables\Columns\IconColumn::make('qr_scan_masuk')
                     ->label('QR Masuk')
@@ -120,6 +123,7 @@ class AbsensiResource extends Resource
                         'izin'      => 'Izin',
                         'sakit'     => 'Sakit',
                         'alpha'     => 'Alpha',
+                        'dinas'     => 'Dinas',
                     ]),
                 Tables\Filters\SelectFilter::make('user')
                     ->relationship('user', 'name')

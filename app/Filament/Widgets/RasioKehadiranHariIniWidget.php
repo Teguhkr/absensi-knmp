@@ -19,7 +19,7 @@ class RasioKehadiranHariIniWidget extends ChartWidget
         $totalPegawai = User::where('role', 'pegawai')->where('is_active', true)->count();
         $hadir = Absensi::whereDate('tanggal', $today)->where('status', 'hadir')->count();
         $terlambat = Absensi::whereDate('tanggal', $today)->where('status', 'terlambat')->count();
-        $izin = Absensi::whereDate('tanggal', $today)->whereIn('status', ['izin', 'sakit'])->count();
+        $izin = Absensi::whereDate('tanggal', $today)->whereIn('status', ['izin', 'sakit', 'dinas'])->count();
         
         $totalHadir = $hadir + $terlambat;
         $alpha = max(0, $totalPegawai - ($totalHadir + $izin));
@@ -32,7 +32,7 @@ class RasioKehadiranHariIniWidget extends ChartWidget
                     'backgroundColor' => [
                         '#10b981', // emerald green (Hadir)
                         '#f59e0b', // amber (Terlambat)
-                        '#0ea5e9', // sky blue (Izin/Sakit)
+                        '#0ea5e9', // sky blue (Izin/Sakit/Dinas)
                         '#f43f5e', // rose red (Alpha/Belum Absen)
                     ],
                     'borderColor' => [
@@ -46,7 +46,7 @@ class RasioKehadiranHariIniWidget extends ChartWidget
             'labels' => [
                 'Hadir (' . $hadir . ')',
                 'Terlambat (' . $terlambat . ')',
-                'Izin / Sakit (' . $izin . ')',
+                'Izin / Sakit / Dinas (' . $izin . ')',
                 'Alpha / Belum Absen (' . $alpha . ')',
             ],
         ];

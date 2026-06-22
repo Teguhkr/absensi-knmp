@@ -16,6 +16,7 @@ class Izin extends Model
         'jenis',
         'alasan',
         'lampiran',
+        'nomor_spt',
         'status',
         'approved_by',
         'catatan_admin',

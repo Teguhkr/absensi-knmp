@@ -20,7 +20,7 @@ class StatistikHariIniWidget extends BaseWidget
         $totalPegawai = User::where('role', 'pegawai')->where('is_active', true)->count();
         $hadir = Absensi::whereDate('tanggal', $today)->where('status', 'hadir')->count();
         $terlambat = Absensi::whereDate('tanggal', $today)->where('status', 'terlambat')->count();
-        $izin = Absensi::whereDate('tanggal', $today)->whereIn('status', ['izin', 'sakit'])->count();
+        $izin = Absensi::whereDate('tanggal', $today)->whereIn('status', ['izin', 'sakit', 'dinas'])->count();
         
         $totalHadir = $hadir + $terlambat;
         $alpha = $totalPegawai - ($totalHadir + $izin);
@@ -40,8 +40,8 @@ class StatistikHariIniWidget extends BaseWidget
                 ->color('success')
                 ->extraAttributes(['class' => 'stat-card-premium stat-kehadiran']),
                 
-            Stat::make('Izin / Sakit', $izin)
-                ->description('Pegawai izin/sakit')
+            Stat::make('Izin / Sakit / Dinas', $izin)
+                ->description('Pegawai izin/sakit/dinas')
                 ->descriptionIcon('heroicon-m-clipboard-document-list')
                 ->color('warning')
                 ->extraAttributes(['class' => 'stat-card-premium stat-izin']),

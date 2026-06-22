@@ -43,8 +43,19 @@ class IzinResource extends Resource
                         ->required(),
                     Forms\Components\Select::make('jenis')
                         ->label('Jenis')
-                        ->options(['izin' => 'Izin', 'sakit' => 'Sakit'])
+                        ->options([
+                            'izin' => 'Izin',
+                            'sakit' => 'Sakit',
+                            'dinas' => 'Izin Dinas',
+                        ])
+                        ->live()
                         ->required(),
+                    Forms\Components\TextInput::make('nomor_spt')
+                        ->label('Nomor SPT')
+                        ->placeholder('Masukkan nomor SPT...')
+                        ->required(fn ($get) => $get('jenis') === 'dinas')
+                        ->visible(fn ($get) => $get('jenis') === 'dinas')
+                        ->columnSpanFull(),
                     Forms\Components\DatePicker::make('tanggal_mulai')
                         ->label('Tanggal Mulai')
                         ->required(),
@@ -93,8 +104,21 @@ class IzinResource extends Resource
                     ->sortable(),
                 Tables\Columns\BadgeColumn::make('jenis')
                     ->label('Jenis')
-                    ->colors(['info' => 'izin', 'warning' => 'sakit'])
-                    ->formatStateUsing(fn ($state) => ucfirst($state)),
+                    ->colors([
+                        'info' => 'izin',
+                        'warning' => 'sakit',
+                        'success' => 'dinas',
+                    ])
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'izin' => 'Izin',
+                        'sakit' => 'Sakit',
+                        'dinas' => 'Izin Dinas',
+                        default => ucfirst($state),
+                    }),
+                Tables\Columns\TextColumn::make('nomor_spt')
+                    ->label('Nomor SPT')
+                    ->placeholder('-')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('tanggal_mulai')
                     ->label('Mulai')
                     ->date('d M Y')
@@ -135,7 +159,11 @@ class IzinResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->options(['pending' => 'Menunggu', 'approved' => 'Disetujui', 'rejected' => 'Ditolak']),
                 Tables\Filters\SelectFilter::make('jenis')
-                    ->options(['izin' => 'Izin', 'sakit' => 'Sakit']),
+                    ->options([
+                        'izin' => 'Izin',
+                        'sakit' => 'Sakit',
+                        'dinas' => 'Izin Dinas',
+                    ]),
             ])
             ->actions([
                 \Filament\Actions\Action::make('approve')
