@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('KNMP | Panel Admin')
             ->brandLogo(asset('logo-knmp.png'))
             ->brandLogoHeight('2.5rem')
+            ->favicon(asset('logo-knmp.png'))
             ->font('Plus Jakarta Sans')
             ->sidebarCollapsibleOnDesktop()
             ->renderHook(

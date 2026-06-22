@@ -30,6 +30,7 @@ class PegawaiPanelProvider extends PanelProvider
             ->brandName('Absensi KNMP')
             ->brandLogo(asset('logo-knmp.png'))
             ->brandLogoHeight('2.5rem')
+            ->favicon(asset('logo-knmp.png'))
             ->font('Plus Jakarta Sans')
             ->sidebarCollapsibleOnDesktop()
             ->renderHook(
