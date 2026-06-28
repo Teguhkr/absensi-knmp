@@ -9,7 +9,7 @@ use Filament\Widgets\ChartWidget;
 
 class RasioKehadiranHariIniWidget extends ChartWidget
 {
-    protected ?string $heading = 'Rasio Kehadiran Hari Ini';
+    protected ?string $heading = 'Rasio Presensi Hari Ini';
     protected static ?int $sort = 3;
 
     protected function getData(): array
@@ -32,8 +32,8 @@ class RasioKehadiranHariIniWidget extends ChartWidget
                     'backgroundColor' => [
                         '#10b981', // emerald green (Hadir)
                         '#f59e0b', // amber (Terlambat)
-                        '#0ea5e9', // sky blue (Izin/Sakit/Dinas)
-                        '#f43f5e', // rose red (Alpha/Belum Absen)
+                        '#0ea5e9', // sky blue (Cuti/Sakit/Penugasan)
+                        '#f43f5e', // rose red (Alpha/Belum Presensi)
                     ],
                     'borderColor' => [
                         '#10b981',
@@ -46,8 +46,8 @@ class RasioKehadiranHariIniWidget extends ChartWidget
             'labels' => [
                 'Hadir (' . $hadir . ')',
                 'Terlambat (' . $terlambat . ')',
-                'Izin / Sakit / Dinas (' . $izin . ')',
-                'Alpha / Belum Absen (' . $alpha . ')',
+                'Cuti / Sakit / Penugasan (' . $izin . ')',
+                'Alpha / Belum Presensi (' . $alpha . ')',
             ],
         ];
     }

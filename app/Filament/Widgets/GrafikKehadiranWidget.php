@@ -48,7 +48,7 @@ class GrafikKehadiranWidget extends ChartWidget
                     'borderColor' => '#f59e0b',
                 ],
                 [
-                    'label' => 'Izin / Sakit / Dinas',
+                    'label' => 'Cuti / Sakit / Penugasan',
                     'data' => $izinData,
                     'backgroundColor' => '#0ea5e9', // sky blue
                     'borderColor' => '#0ea5e9',

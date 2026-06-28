@@ -56,10 +56,10 @@ class Absensi extends Model
         return match ($this->status) {
             'hadir'     => 'Hadir',
             'terlambat' => 'Terlambat',
-            'izin'      => 'Izin',
+            'izin'      => 'Cuti',
             'sakit'     => 'Sakit',
             'alpha'     => 'Alpha',
-            'dinas'     => 'Dinas',
+            'dinas'     => 'Penugasan',
             default     => 'Unknown',
         };
     }

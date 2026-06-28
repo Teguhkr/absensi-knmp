@@ -141,7 +141,7 @@ class LaporanHarianResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.departemen')
-                    ->label('Departemen')
+                    ->label('Penempatan')
                     ->badge()
                     ->color('info')
                     ->searchable(),
@@ -167,7 +167,7 @@ class LaporanHarianResource extends Resource
                     ->searchable()
                     ->preload(),
                 Tables\Filters\SelectFilter::make('departemen')
-                    ->label('Departemen')
+                    ->label('Penempatan')
                     ->options(fn () => User::whereNotNull('departemen')->pluck('departemen', 'departemen')->toArray())
                     ->query(function (Builder $query, array $data) {
                         if (empty($data['value'])) {

@@ -12,7 +12,7 @@ class AbsensiTerbaruWidget extends BaseWidget
 {
     protected static ?int $sort = 4;
     protected int | string | array $columnSpan = 'full';
-    protected static ?string $heading = 'Absensi Terbaru Hari Ini';
+    protected static ?string $heading = 'Presensi Terbaru Hari Ini';
 
     public function table(Table $table): Table
     {
@@ -46,10 +46,10 @@ class AbsensiTerbaruWidget extends BaseWidget
                     ->formatStateUsing(fn ($state) => match($state) {
                         'hadir'     => 'Hadir',
                         'terlambat' => 'Terlambat',
-                        'izin'      => 'Izin',
+                        'izin'      => 'Cuti',
                         'sakit'     => 'Sakit',
                         'alpha'     => 'Alpha',
-                        'dinas'     => 'Dinas',
+                        'dinas'     => 'Penugasan',
                         default     => ucfirst($state),
                     }),
             ])

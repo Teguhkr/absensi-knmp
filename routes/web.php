@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LaporanHarianPdfController;
 use App\Http\Controllers\QrAbsensiController;
+use App\Http\Controllers\RiwayatAbsensiPdfController;
 use Illuminate\Support\Facades\Route;
 
 // Portal Utama
@@ -17,5 +18,11 @@ Route::post('/absensi/scan/{token}', [QrAbsensiController::class, 'processScan']
 Route::get('/laporan-harian/pdf', [LaporanHarianPdfController::class, 'download'])
     ->name('laporan-harian.pdf')
     ->middleware(['auth']);
+
+// Route untuk cetak PDF Riwayat Presensi
+Route::get('/riwayat-absensi/pdf', [RiwayatAbsensiPdfController::class, 'download'])
+    ->name('riwayat-absensi.pdf')
+    ->middleware(['auth']);
+
 
 // Route bawaan Breeze kita hilangkan karena tidak digunakan (Autentikasi di-handle oleh Filament)

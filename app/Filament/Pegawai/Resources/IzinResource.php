@@ -17,25 +17,25 @@ class IzinResource extends Resource
 {
     protected static ?string $model = Izin::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-plus';
-    protected static ?string $navigationLabel = 'Pengajuan Izin';
-    protected static ?string $modelLabel = 'Izin';
-    protected static ?string $pluralModelLabel = 'Pengajuan Izin';
+    protected static ?string $navigationLabel = 'Pengajuan Cuti & Penugasan';
+    protected static ?string $modelLabel = 'Cuti & Penugasan';
+    protected static ?string $pluralModelLabel = 'Pengajuan Cuti & Penugasan';
     protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->schema([
-                Section::make('Form Pengajuan Izin / Sakit')
+                Section::make('Form Pengajuan Cuti / Penugasan / Sakit')
                     ->schema([
                         Forms\Components\Hidden::make('user_id')
                             ->default(fn () => Auth::id()),
                         Forms\Components\Select::make('jenis')
                             ->label('Jenis Pengajuan')
                             ->options([
-                                'izin' => 'Izin',
+                                'izin'  => 'Cuti',
                                 'sakit' => 'Sakit',
-                                'dinas' => 'Izin Dinas',
+                                'dinas' => 'Penugasan',
                             ])
                             ->live()
                             ->required(),
@@ -68,6 +68,31 @@ class IzinResource extends Resource
                         Forms\Components\Hidden::make('status')
                             ->default('pending'),
                     ])->columns(2),
+
+                // ===== SECTION LOKASI PENUGASAN =====
+                Section::make('📍 Lokasi Penugasan')
+                    ->description('Masukkan koordinat GPS lokasi tempat penugasan berlangsung. Presensi selama penugasan akan divalidasi di lokasi ini.')
+                    ->schema([
+                        Forms\Components\Placeholder::make('info_lokasi')
+                            ->label('')
+                            ->content('Anda dapat mendapatkan koordinat dari Google Maps (klik kanan pada lokasi → "Koordinat ini"). Format: -6.123456, 106.123456')
+                            ->columnSpanFull(),
+                        Forms\Components\TextInput::make('latitude')
+                            ->label('Latitude (Lintang)')
+                            ->placeholder('Contoh: -6.200000')
+                            ->numeric()
+                            ->required(fn ($get) => $get('jenis') === 'dinas')
+                            ->rules(['nullable', 'numeric', 'between:-90,90']),
+                        Forms\Components\TextInput::make('longitude')
+                            ->label('Longitude (Bujur)')
+                            ->placeholder('Contoh: 106.816666')
+                            ->numeric()
+                            ->required(fn ($get) => $get('jenis') === 'dinas')
+                            ->rules(['nullable', 'numeric', 'between:-180,180']),
+                    ])
+                    ->columns(2)
+                    ->visible(fn ($get) => $get('jenis') === 'dinas')
+                    ->collapsible(),
             ]);
     }
 
@@ -78,14 +103,14 @@ class IzinResource extends Resource
                 Tables\Columns\BadgeColumn::make('jenis')
                     ->label('Jenis')
                     ->colors([
-                        'info' => 'izin',
+                        'info'    => 'izin',
                         'warning' => 'sakit',
                         'success' => 'dinas',
                     ])
                     ->formatStateUsing(fn ($state) => match($state) {
-                        'izin' => 'Izin',
+                        'izin'  => 'Cuti',
                         'sakit' => 'Sakit',
-                        'dinas' => 'Izin Dinas',
+                        'dinas' => 'Penugasan',
                         default => ucfirst($state),
                     }),
                 Tables\Columns\TextColumn::make('nomor_spt')
@@ -115,6 +140,21 @@ class IzinResource extends Resource
                         'rejected' => 'Ditolak',
                         default    => $state,
                     }),
+                Tables\Columns\BadgeColumn::make('req_lokasi_status')
+                    ->label('Perubahan Lokasi')
+                    ->colors([
+                        'warning' => 'pending',
+                        'success' => 'approved',
+                        'danger'  => 'rejected',
+                    ])
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'pending'  => '⏳ Menunggu',
+                        'approved' => '✅ Disetujui',
+                        'rejected' => '❌ Ditolak',
+                        default    => '-',
+                    })
+                    ->placeholder('-')
+                    ->visible(fn ($livewire) => true),
                 Tables\Columns\IconColumn::make('lampiran')
                     ->label('Bukti')
                     ->icon(fn ($state) => $state ? 'heroicon-o-paper-clip' : 'heroicon-o-minus')

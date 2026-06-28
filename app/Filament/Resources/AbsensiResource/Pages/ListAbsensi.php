@@ -22,7 +22,7 @@ class ListAbsensi extends ListRecords
                 ->action(function () {
                     return Excel::download(new AbsensiExport, 'absensi-' . now()->format('Y-m-d') . '.xlsx');
                 }),
-            Actions\CreateAction::make()->label('Tambah Absensi'),
+            Actions\CreateAction::make()->label('Tambah Presensi'),
         ];
     }
 }

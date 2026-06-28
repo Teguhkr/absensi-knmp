@@ -11,6 +11,6 @@ class ListIzin extends ListRecords
     protected static string $resource = IzinResource::class;
     protected function getHeaderActions(): array
     {
-        return [Actions\CreateAction::make()->label('Tambah Izin')];
+        return [Actions\CreateAction::make()->label('Tambah Cuti / Penugasan')];
     }
 }

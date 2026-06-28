@@ -18,15 +18,15 @@ class AbsensiResource extends Resource
 {
     protected static ?string $model = Absensi::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-check';
-    protected static ?string $navigationLabel = 'Data Absensi';
-    protected static ?string $modelLabel = 'Absensi';
-    protected static ?string $pluralModelLabel = 'Data Absensi';
+    protected static ?string $navigationLabel = 'Data Presensi';
+    protected static ?string $modelLabel = 'Presensi';
+    protected static ?string $pluralModelLabel = 'Data Presensi';
     protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {
         return $schema->schema([
-            Section::make('Data Absensi')
+            Section::make('Data Presensi')
                 ->schema([
                     Forms\Components\Select::make('user_id')
                         ->label('Pegawai')
@@ -49,10 +49,10 @@ class AbsensiResource extends Resource
                         ->options([
                             'hadir'     => 'Hadir',
                             'terlambat' => 'Terlambat',
-                            'izin'      => 'Izin',
+                            'izin'      => 'Cuti',
                             'sakit'     => 'Sakit',
                             'alpha'     => 'Alpha',
-                            'dinas'     => 'Dinas',
+                            'dinas'     => 'Penugasan',
                         ])
                         ->required()
                         ->default('hadir'),
@@ -72,7 +72,7 @@ class AbsensiResource extends Resource
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.departemen')
-                    ->label('Departemen')
+                    ->label('Penempatan')
                     ->searchable()
                     ->badge()
                     ->color('info'),
@@ -101,10 +101,10 @@ class AbsensiResource extends Resource
                     ->formatStateUsing(fn ($state) => match($state) {
                         'hadir'     => 'Hadir',
                         'terlambat' => 'Terlambat',
-                        'izin'      => 'Izin',
+                        'izin'      => 'Cuti',
                         'sakit'     => 'Sakit',
                         'alpha'     => 'Alpha',
-                        'dinas'     => 'Dinas',
+                        'dinas'     => 'Penugasan',
                         default     => ucfirst($state),
                     }),
                 Tables\Columns\IconColumn::make('qr_scan_masuk')
@@ -120,10 +120,10 @@ class AbsensiResource extends Resource
                     ->options([
                         'hadir'     => 'Hadir',
                         'terlambat' => 'Terlambat',
-                        'izin'      => 'Izin',
+                        'izin'      => 'Cuti',
                         'sakit'     => 'Sakit',
                         'alpha'     => 'Alpha',
-                        'dinas'     => 'Dinas',
+                        'dinas'     => 'Penugasan',
                     ]),
                 Tables\Filters\SelectFilter::make('user')
                     ->relationship('user', 'name')

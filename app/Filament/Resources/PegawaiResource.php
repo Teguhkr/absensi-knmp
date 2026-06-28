@@ -64,7 +64,7 @@ class PegawaiResource extends Resource
                         ->label('Jabatan')
                         ->maxLength(255),
                     Forms\Components\TextInput::make('departemen')
-                        ->label('Departemen / Bidang')
+                        ->label('Penempatan')
                         ->maxLength(255),
                     Forms\Components\TextInput::make('no_hp')
                         ->label('Nomor HP')
@@ -112,7 +112,7 @@ class PegawaiResource extends Resource
                     ->label('Jabatan')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('departemen')
-                    ->label('Departemen')
+                    ->label('Penempatan')
                     ->searchable()
                     ->badge()
                     ->color('info'),
@@ -134,7 +134,7 @@ class PegawaiResource extends Resource
                     ]),
                 Tables\Filters\SelectFilter::make('departemen')
                     ->options(fn () => User::whereNotNull('departemen')->pluck('departemen', 'departemen')->toArray())
-                    ->label('Departemen'),
+                    ->label('Penempatan'),
                 Tables\Filters\TernaryFilter::make('is_active')->label('Status Aktif'),
             ])
             ->actions([

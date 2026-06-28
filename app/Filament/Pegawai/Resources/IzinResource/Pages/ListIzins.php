@@ -13,7 +13,7 @@ class ListIzins extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Ajukan Izin / Sakit'),
+            Actions\CreateAction::make()->label('Ajukan Cuti / Penugasan / Sakit'),
         ];
     }
 }

@@ -27,7 +27,7 @@ class PegawaiPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::hex('#0B3B60'),
             ])
-            ->brandName('Absensi KNMP')
+            ->brandName('Presensi KNMP')
             ->brandLogo(asset('logo-knmp.png'))
             ->brandLogoHeight('2.5rem')
             ->favicon(asset('logo-knmp.png'))

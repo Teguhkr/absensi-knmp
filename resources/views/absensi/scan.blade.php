@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scan Absensi - {{ \App\Models\PengaturanSistem::get('nama_instansi', 'KNMP') }}</title>
+    <title>Scan Presensi - {{ \App\Models\PengaturanSistem::get('nama_instansi', 'KNMP') }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -21,11 +21,11 @@
             <a href="{{ url('/') }}" class="flex items-center space-x-3 hover:opacity-90 transition duration-200">
                 <img src="{{ asset('logo-knmp.png') }}" alt="Logo KNMP" class="h-12 w-auto object-contain">
                 <div class="hidden md:block">
-                    <span class="text-sm font-bold text-slate-800 tracking-wide uppercase block">Absensi KNMP</span>
+                    <span class="text-sm font-bold text-slate-800 tracking-wide uppercase block">Presensi KNMP</span>
                     <span class="text-[10px] text-slate-500 font-semibold tracking-wider uppercase block">Kampung Nelayan Merah Putih</span>
                 </div>
             </a>
-
+            
             <!-- Kanan: Logo KKP & Ekonomi Biru -->
             <div class="flex items-center space-x-3 sm:space-x-4">
                 <img src="{{ asset('Logo KKP Pangan Biru Putih.png') }}" alt="Logo KKP" class="h-10 sm:h-12 w-auto object-contain">
@@ -106,19 +106,19 @@
                     @if(!$absensiHariIni || !$absensiHariIni->jam_masuk)
                         <button type="submit" name="absen_masuk" class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-teal-600 hover:to-emerald-600 text-white font-bold py-3.5 px-4 rounded-xl transition duration-300 shadow-md shadow-emerald-900/10 hover:shadow-emerald-900/20 transform hover:-translate-y-0.5 flex items-center justify-center text-sm tracking-wide">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-                            PROSES ABSEN MASUK
+                            PROSES PRESENSI MASUK
                         </button>
                     @elseif($absensiHariIni && $absensiHariIni->jam_masuk && !$absensiHariIni->jam_pulang)
                         <button type="submit" name="absen_pulang" 
                                 @if($warningPulangCepat) onclick="return confirm('{{ $warningPulangCepat }}')" @endif
                                 class="w-full bg-gradient-to-r from-rose-600 to-red-600 hover:from-red-600 hover:to-rose-600 text-white font-bold py-3.5 px-4 rounded-xl transition duration-300 shadow-md shadow-rose-900/10 hover:shadow-rose-900/20 transform hover:-translate-y-0.5 flex items-center justify-center text-sm tracking-wide">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                            PROSES ABSEN PULANG
+                            PROSES PRESENSI PULANG
                         </button>
                     @else
                         <div class="text-center p-4 bg-slate-50 text-slate-500 rounded-xl border border-slate-100 text-sm font-semibold tracking-wide flex items-center justify-center">
                             <svg class="w-5 h-5 text-slate-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            Absensi hari ini sudah selesai.
+                            Presensi hari ini sudah selesai.
                         </div>
                     @endif
                 </form>

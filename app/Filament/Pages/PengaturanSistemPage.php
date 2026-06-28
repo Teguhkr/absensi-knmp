@@ -37,7 +37,7 @@ class PengaturanSistemPage extends Page implements HasForms
     {
         return $schema
             ->schema([
-                Section::make('Pengaturan Waktu Absensi')
+                Section::make('Pengaturan Waktu Presensi')
                     ->description('Atur jam masuk, jam pulang, dan toleransi keterlambatan.')
                     ->schema([
                         TimePicker::make('jam_masuk')
@@ -53,12 +53,12 @@ class PengaturanSistemPage extends Page implements HasForms
                             ->numeric()
                             ->required(),
                     ])->columns(3),
-
+ 
                 Section::make('Pengaturan Lokasi Kantor (GPS)')
-                    ->description('Koordinat pusat kantor untuk validasi jarak absensi pegawai.')
+                    ->description('Koordinat pusat kantor untuk validasi jarak presensi pegawai.')
                     ->schema([
                         Toggle::make('validasi_gps')
-                            ->label('Aktifkan Validasi GPS saat Absen')
+                            ->label('Aktifkan Validasi GPS saat Presensi')
                             ->default(true)
                             ->columnSpanFull(),
                         TextInput::make('kantor_latitude')
@@ -70,10 +70,10 @@ class PengaturanSistemPage extends Page implements HasForms
                             ->numeric()
                             ->required(),
                         TextInput::make('radius_absensi')
-                            ->label('Radius Absensi (meter)')
+                            ->label('Radius Presensi (meter)')
                             ->numeric()
                             ->required()
-                            ->helperText('Jarak maksimal pegawai bisa melakukan absen dari titik pusat kantor.'),
+                            ->helperText('Jarak maksimal pegawai bisa melakukan presensi dari titik pusat kantor.'),
                     ])->columns(3),
                     
                 Section::make('Informasi Instansi')

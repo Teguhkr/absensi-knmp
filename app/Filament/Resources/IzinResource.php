@@ -12,21 +12,24 @@ use Filament\Schemas\Components\Section;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 
 class IzinResource extends Resource
 {
     protected static ?string $model = Izin::class;
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
-    protected static ?string $navigationLabel = 'Izin & Sakit';
-    protected static ?string $modelLabel = 'Pengajuan Izin';
-    protected static ?string $pluralModelLabel = 'Izin & Sakit';
+    protected static ?string $navigationLabel = 'Cuti & Penugasan';
+    protected static ?string $modelLabel = 'Cuti & Penugasan';
+    protected static ?string $pluralModelLabel = 'Cuti & Penugasan';
     protected static ?int $navigationSort = 3;
     protected static ?string $navigationBadgeColor = 'warning';
 
     public static function getNavigationBadge(): ?string
     {
-        $count = static::getModel()::where('status', 'pending')->count();
+        $count = static::getModel()::where('status', 'pending')
+            ->orWhere('req_lokasi_status', 'pending')
+            ->count();
         return $count > 0 ? (string) $count : null;
     }
 
@@ -44,9 +47,9 @@ class IzinResource extends Resource
                     Forms\Components\Select::make('jenis')
                         ->label('Jenis')
                         ->options([
-                            'izin' => 'Izin',
+                            'izin'  => 'Cuti',
                             'sakit' => 'Sakit',
-                            'dinas' => 'Izin Dinas',
+                            'dinas' => 'Penugasan',
                         ])
                         ->live()
                         ->required(),
@@ -75,6 +78,23 @@ class IzinResource extends Resource
                         ->openable()
                         ->columnSpanFull(),
                 ])->columns(2),
+
+            // ===== LOKASI PENUGASAN =====
+            Section::make('📍 Lokasi Penugasan')
+                ->description('Koordinat GPS lokasi tempat penugasan berlangsung.')
+                ->schema([
+                    Forms\Components\TextInput::make('latitude')
+                        ->label('Latitude')
+                        ->numeric()
+                        ->placeholder('-6.200000'),
+                    Forms\Components\TextInput::make('longitude')
+                        ->label('Longitude')
+                        ->numeric()
+                        ->placeholder('106.816666'),
+                ])
+                ->columns(2)
+                ->visible(fn ($get) => $get('jenis') === 'dinas')
+                ->collapsible(),
 
             Section::make('Keputusan Admin')
                 ->schema([
@@ -105,14 +125,14 @@ class IzinResource extends Resource
                 Tables\Columns\BadgeColumn::make('jenis')
                     ->label('Jenis')
                     ->colors([
-                        'info' => 'izin',
+                        'info'    => 'izin',
                         'warning' => 'sakit',
                         'success' => 'dinas',
                     ])
                     ->formatStateUsing(fn ($state) => match($state) {
-                        'izin' => 'Izin',
+                        'izin'  => 'Cuti',
                         'sakit' => 'Sakit',
-                        'dinas' => 'Izin Dinas',
+                        'dinas' => 'Penugasan',
                         default => ucfirst($state),
                     }),
                 Tables\Columns\TextColumn::make('nomor_spt')
@@ -143,6 +163,20 @@ class IzinResource extends Resource
                         'rejected' => 'Ditolak',
                         default    => $state,
                     }),
+                Tables\Columns\BadgeColumn::make('req_lokasi_status')
+                    ->label('Ubah Lokasi')
+                    ->colors([
+                        'warning' => 'pending',
+                        'success' => 'approved',
+                        'danger'  => 'rejected',
+                    ])
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'pending'  => '⏳ Menunggu',
+                        'approved' => '✅ Disetujui',
+                        'rejected' => '❌ Ditolak',
+                        default    => '-',
+                    })
+                    ->placeholder('-'),
                 Tables\Columns\IconColumn::make('lampiran')
                     ->label('Bukti')
                     ->icon(fn ($state) => $state ? 'heroicon-o-paper-clip' : 'heroicon-o-minus')
@@ -160,12 +194,16 @@ class IzinResource extends Resource
                     ->options(['pending' => 'Menunggu', 'approved' => 'Disetujui', 'rejected' => 'Ditolak']),
                 Tables\Filters\SelectFilter::make('jenis')
                     ->options([
-                        'izin' => 'Izin',
+                        'izin'  => 'Cuti',
                         'sakit' => 'Sakit',
-                        'dinas' => 'Izin Dinas',
+                        'dinas' => 'Penugasan',
                     ]),
+                Tables\Filters\Filter::make('req_lokasi_pending')
+                    ->label('Ada Request Ubah Lokasi')
+                    ->query(fn (Builder $query) => $query->where('req_lokasi_status', 'pending')),
             ])
             ->actions([
+                // ---- APPROVE PENUGASAN ----
                 \Filament\Actions\Action::make('approve')
                     ->label('Setujui')
                     ->icon('heroicon-o-check-circle')
@@ -176,7 +214,7 @@ class IzinResource extends Resource
                             'status'      => 'approved',
                             'approved_by' => auth()->id(),
                         ]);
-                        // Buat/update record absensi untuk setiap hari izin
+                        // Buat/update record absensi untuk setiap hari penugasan
                         $start = Carbon::parse($record->tanggal_mulai);
                         $end   = Carbon::parse($record->tanggal_selesai);
                         while ($start->lte($end)) {
@@ -185,22 +223,24 @@ class IzinResource extends Resource
                                 ->first();
                             if ($existing) {
                                 $existing->update([
-                                    'status'    => $record->jenis,
-                                    'keterangan'=> $record->alasan,
+                                    'status'     => $record->jenis,
+                                    'keterangan' => $record->alasan,
                                 ]);
                             } else {
                                 \App\Models\Absensi::create([
-                                    'user_id'   => $record->user_id,
-                                    'tanggal'   => $start->toDateString(),
-                                    'status'    => $record->jenis,
-                                    'keterangan'=> $record->alasan,
+                                    'user_id'    => $record->user_id,
+                                    'tanggal'    => $start->toDateString(),
+                                    'status'     => $record->jenis,
+                                    'keterangan' => $record->alasan,
                                 ]);
                             }
                             $start->addDay();
                         }
+                        Notification::make()->success()->title('Pengajuan disetujui.')->send();
                     })
                     ->visible(fn (Izin $record) => $record->status === 'pending'),
 
+                // ---- REJECT PENUGASAN ----
                 \Filament\Actions\Action::make('reject')
                     ->label('Tolak')
                     ->icon('heroicon-o-x-circle')
@@ -217,8 +257,70 @@ class IzinResource extends Resource
                             'approved_by'   => auth()->id(),
                             'catatan_admin' => $data['catatan_admin'],
                         ]);
+                        Notification::make()->danger()->title('Pengajuan ditolak.')->send();
                     })
                     ->visible(fn (Izin $record) => $record->status === 'pending'),
+
+                // ---- APPROVE PERUBAHAN LOKASI ----
+                \Filament\Actions\Action::make('approve_lokasi')
+                    ->label('✅ Setujui Lokasi Baru')
+                    ->icon('heroicon-o-map-pin')
+                    ->color('success')
+                    ->modalHeading('Setujui Perubahan Lokasi Penugasan')
+                    ->form(fn (Izin $record) => [
+                        Forms\Components\Placeholder::make('info_lokasi_lama')
+                            ->label('📍 Lokasi Lama (Saat Ini)')
+                            ->content(fn () => $record->latitude && $record->longitude
+                                ? number_format($record->latitude, 6) . ', ' . number_format($record->longitude, 6)
+                                : '(Belum diset)'
+                            ),
+                        Forms\Components\Placeholder::make('info_lokasi_baru')
+                            ->label('📍 Lokasi Baru yang Diajukan')
+                            ->content(fn () => number_format($record->req_latitude, 6) . ', ' . number_format($record->req_longitude, 6)),
+                        Forms\Components\Placeholder::make('info_alasan')
+                            ->label('💬 Alasan Perubahan Lokasi')
+                            ->content(fn () => $record->req_lokasi_alasan ?? '-'),
+                        Forms\Components\Textarea::make('req_lokasi_catatan')
+                            ->label('Catatan Persetujuan (opsional)')
+                            ->placeholder('Catatan untuk pegawai...'),
+                    ])
+                    ->action(function (Izin $record, array $data) {
+                        $record->update([
+                            'latitude'           => $record->req_latitude,
+                            'longitude'          => $record->req_longitude,
+                            'req_lokasi_status'  => 'approved',
+                            'req_lokasi_catatan' => $data['req_lokasi_catatan'] ?? null,
+                        ]);
+                        Notification::make()->success()->title('Perubahan lokasi disetujui. Koordinat penugasan telah diperbarui.')->send();
+                    })
+                    ->visible(fn (Izin $record) => $record->req_lokasi_status === 'pending' && $record->jenis === 'dinas'),
+
+                // ---- REJECT PERUBAHAN LOKASI ----
+                \Filament\Actions\Action::make('reject_lokasi')
+                    ->label('❌ Tolak Lokasi Baru')
+                    ->icon('heroicon-o-x-mark')
+                    ->color('danger')
+                    ->modalHeading('Tolak Perubahan Lokasi Penugasan')
+                    ->form(fn (Izin $record) => [
+                        Forms\Components\Placeholder::make('info_lokasi_baru')
+                            ->label('📍 Lokasi Baru yang Diajukan')
+                            ->content(fn () => number_format($record->req_latitude, 6) . ', ' . number_format($record->req_longitude, 6)),
+                        Forms\Components\Placeholder::make('info_alasan')
+                            ->label('💬 Alasan dari Pegawai')
+                            ->content(fn () => $record->req_lokasi_alasan ?? '-'),
+                        Forms\Components\Textarea::make('req_lokasi_catatan')
+                            ->label('Alasan Penolakan')
+                            ->required()
+                            ->placeholder('Jelaskan alasan penolakan...'),
+                    ])
+                    ->action(function (Izin $record, array $data) {
+                        $record->update([
+                            'req_lokasi_status'  => 'rejected',
+                            'req_lokasi_catatan' => $data['req_lokasi_catatan'],
+                        ]);
+                        Notification::make()->warning()->title('Perubahan lokasi ditolak.')->send();
+                    })
+                    ->visible(fn (Izin $record) => $record->req_lokasi_status === 'pending' && $record->jenis === 'dinas'),
 
                 \Filament\Actions\ViewAction::make(),
                 \Filament\Actions\DeleteAction::make(),

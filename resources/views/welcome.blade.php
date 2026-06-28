@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Absensi - {{ \App\Models\PengaturanSistem::get('nama_instansi', 'KNMP') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('logo-knmp.png') }}">
+    <title>Sistem Presensi - {{ \App\Models\PengaturanSistem::get('nama_instansi', 'KNMP') }}</title>
+    <link class="h-12 w-auto object-contain" href="{{ asset('logo-knmp.png') }}">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -49,7 +49,7 @@
                     Kementerian Kelautan dan Perikanan
                 </span>
                 <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                    Sistem Informasi <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#0B3B60] to-blue-500">Absensi Pegawai</span>
+                    Sistem Informasi <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#0B3B60] to-blue-500">Presensi Pegawai</span>
                 </h1>
                 <p class="mt-4 text-base md:text-lg text-slate-600 font-normal leading-relaxed">
                     Portal Layanan Presensi Kampung Nelayan Merah Putih (KNMP) untuk Pegawai dan Administrator.
@@ -66,7 +66,7 @@
                         </div>
                         <h2 class="text-2xl font-bold text-slate-800">Panel TA & TP</h2>
                         <p class="text-slate-500 leading-relaxed mb-6 text-sm">(Tenaga Ahli & Tenaga Pendukung)</p>
-                        <p class="text-slate-500 leading-relaxed mb-6 text-sm">Masuk untuk melakukan absensi harian (GPS & QR), memantau riwayat presensi, serta mengajukan izin atau sakit secara praktis.</p>
+                        <p class="text-slate-500 leading-relaxed mb-6 text-sm">Masuk untuk melakukan presensi harian (GPS & QR), memantau riwayat presensi, serta mengajukan cuti, penugasan atau sakit secara praktis.</p>
                         
                         <!-- List Fitur -->
                         <ul class="space-y-2 text-sm text-slate-600">
@@ -80,7 +80,7 @@
                             </li>
                             <li class="flex items-center">
                                 <svg class="w-4 h-4 text-emerald-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                Form Pengajuan Izin / Sakit
+                                Form Pengajuan Cuti / Penugasan / Sakit
                             </li>
                         </ul>
                     </div>
@@ -98,7 +98,7 @@
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                         </div>
                         <h2 class="text-2xl font-bold text-slate-800 mb-3">Panel Admin</h2>
-                        <p class="text-slate-500 leading-relaxed mb-6 text-sm">Masuk untuk mengelola data master pegawai, memantau rekap absensi harian, memvalidasi perizinan, dan mengatur sistem.</p>
+                        <p class="text-slate-500 leading-relaxed mb-6 text-sm">Masuk untuk mengelola data master pegawai, memantau rekap presensi harian, memvalidasi cuti & penugasan, dan mengatur sistem.</p>
                         
                         <!-- List Fitur -->
                         <ul class="space-y-2 text-sm text-slate-600">
