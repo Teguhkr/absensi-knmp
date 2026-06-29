@@ -78,9 +78,20 @@
                 style="text-align:center; vertical-align:middle;
                        width:35%; border-left: 1.5px solid #000; border-bottom: 1px solid #000;
                        padding: 6px;">
-                @php $logoPath = public_path('image.png'); @endphp
-                @if(file_exists($logoPath))
-                    <img src="{{ $logoPath }}" style="max-height:90px; max-width:90px; display:block; margin:0 auto;">
+                @php
+                    $logoPath = public_path('image.png');
+                    $logoBase64 = '';
+                    if (file_exists($logoPath)) {
+                        try {
+                            $logoData = file_get_contents($logoPath);
+                            $logoBase64 = 'data:image/' . pathinfo($logoPath, PATHINFO_EXTENSION) . ';base64,' . base64_encode($logoData);
+                        } catch (\Exception $e) {
+                            // ignore
+                        }
+                    }
+                @endphp
+                @if($logoBase64)
+                    <img src="{{ $logoBase64 }}" style="max-height:90px; max-width:90px; display:block; margin:0 auto;">
                 @endif
             </td>
         </tr>
@@ -243,12 +254,23 @@
                 <td class="text-center" style="vertical-align:middle;">1</td>
                 <td class="text-center" style="padding:8px; vertical-align:middle;">
                     @if($report->dokumentasi)
-                        @php $imgPath = storage_path('app/public/' . $report->dokumentasi); @endphp
-                        @if(file_exists($imgPath))
-                            <img src="{{ $imgPath }}"
+                        @php
+                            $imgPath = storage_path('app/public/' . $report->dokumentasi);
+                            $imgBase64 = '';
+                            if (file_exists($imgPath)) {
+                                try {
+                                    $imgData = file_get_contents($imgPath);
+                                    $imgBase64 = 'data:image/' . pathinfo($imgPath, PATHINFO_EXTENSION) . ';base64,' . base64_encode($imgData);
+                                } catch (\Exception $e) {
+                                    // ignore
+                                }
+                            }
+                        @endphp
+                        @if($imgBase64)
+                            <img src="{{ $imgBase64 }}"
                                  style="max-width:100%; max-height:160px; object-fit:contain;">
                         @else
-                            <span style="color:red; font-size:8px;">File tidak ditemukan</span>
+                            <span style="color:red; font-size:8px;">File tidak ditemukan atau tidak dapat dibaca</span>
                         @endif
                     @else
                         <span style="color:gray; font-size:8px;">Tidak ada foto dokumentasi</span>

@@ -177,9 +177,20 @@
                 </div>
             </td>
             <td style="vertical-align:middle;text-align:right;width:25%;">
-                @php $logoPath = public_path('image.png'); @endphp
-                @if(file_exists($logoPath))
-                    <img src="{{ $logoPath }}" style="max-height:70px;max-width:80px;object-fit:contain;">
+                @php
+                    $logoPath = public_path('image.png');
+                    $logoBase64 = '';
+                    if (file_exists($logoPath)) {
+                        try {
+                            $logoData = file_get_contents($logoPath);
+                            $logoBase64 = 'data:image/' . pathinfo($logoPath, PATHINFO_EXTENSION) . ';base64,' . base64_encode($logoData);
+                        } catch (\Exception $e) {
+                            // Silently ignore if read fails
+                        }
+                    }
+                @endphp
+                @if($logoBase64)
+                    <img src="{{ $logoBase64 }}" style="max-height:70px;max-width:80px;object-fit:contain;">
                 @endif
             </td>
         </tr>
