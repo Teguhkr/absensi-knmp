@@ -362,8 +362,8 @@
             <div style="font-size: 10.5px; margin-bottom: 50px; margin-top: 4px;">
                 Mengetahui,
             </div>
-            <div class="ttd-name">Achmad Rizcky Alfadion</div>
-            <div class="ttd-jabatan">(Mentor)</div>
+            <div class="ttd-name">Fauzan Idris Maspeke, S.T, M.Si</div>
+            <div class="ttd-jabatan">(Pejabat Pembuat Komitmen)</div>
         </div>
     </div>
 

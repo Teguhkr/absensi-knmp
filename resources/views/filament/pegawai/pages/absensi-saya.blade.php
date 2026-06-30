@@ -97,8 +97,8 @@
                     </div>
                 </div>
 
-                {{-- ===== TOMBOL & FORM UBAH LOKASI (hanya saat Sudah Masuk) ===== --}}
-                @if(in_array($statusAbsenSekarang, ['Sudah Masuk']) && $penugasanAktif->req_lokasi_status !== 'pending')
+                {{-- ===== TOMBOL & FORM UBAH LOKASI (kapan saja selama penugasan aktif) ===== --}}
+                @if($penugasanAktif->req_lokasi_status !== 'pending')
                     <div style="margin-bottom:12px;">
                         <button
                             type="button"

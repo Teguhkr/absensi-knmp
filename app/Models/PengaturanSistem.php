@@ -27,7 +27,10 @@ class PengaturanSistem extends Model
      */
     public static function set(string $key, mixed $value): void
     {
-        static::updateOrCreate(['key' => $key], ['value' => $value]);
+        static::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value, 'label' => $key]
+        );
         Cache::forget("setting_{$key}");
     }
 
