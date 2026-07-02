@@ -19,7 +19,6 @@ class LaporanHarian extends Model
         'operasional',
         'lokasi_knmp',
         'dokumentasi',
-        'keterangan_dokumentasi',
     ];
 
     /**
@@ -30,9 +29,10 @@ class LaporanHarian extends Model
     protected function casts(): array
     {
         return [
-            'tanggal' => 'date',
+            'tanggal'     => 'date',
             'operasional' => 'array',
             'lokasi_knmp' => 'array',
+            'dokumentasi' => 'array',
         ];
     }
 

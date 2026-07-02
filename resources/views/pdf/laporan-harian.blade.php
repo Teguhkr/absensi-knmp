@@ -32,6 +32,11 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 12px;
+            page-break-inside: auto;
+        }
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
         }
         th, td {
             border: 1px solid #000;
@@ -179,7 +184,11 @@
     <div class="section-title">OPERASIONAL</div>
     @php
         $operasionalItems = $report->operasional ?? [];
-        $paddedOperasional = array_pad($operasionalItems, 6, ['kegiatan' => '', 'status' => null]);
+        if (!is_array($operasionalItems)) {
+            $operasionalItems = [];
+        }
+        // Tambahkan tepat 1 item kosong di akhir
+        $operasionalItems[] = ['kegiatan' => '', 'status' => null];
     @endphp
     <table>
         <thead>
@@ -190,7 +199,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($paddedOperasional as $index => $item)
+            @foreach($operasionalItems as $index => $item)
             <tr>
                 <td class="text-center" style="height:18px;">{{ $index + 1 }}</td>
                 <td>{{ $item['kegiatan'] ?? '' }}</td>
@@ -210,8 +219,12 @@
     {{-- ===== LOKASI KNMP ===== --}}
     <div class="section-title">LOKASI KNMP <span style="font-size:9px; font-style:italic; font-weight:normal;">(Dikantor dikosongkan)</span></div>
     @php
-        $lokasiItems  = $report->lokasi_knmp ?? [];
-        $paddedLokasi = array_pad($lokasiItems, 4, ['peristiwa'=>'','status'=>'','keterangan'=>'','tindak_lanjut'=>'']);
+        $lokasiItems = $report->lokasi_knmp ?? [];
+        if (!is_array($lokasiItems)) {
+            $lokasiItems = [];
+        }
+        // Tambahkan tepat 1 item kosong di akhir
+        $lokasiItems[] = ['peristiwa' => '', 'status' => '', 'keterangan' => '', 'tindak_lanjut' => ''];
     @endphp
     <table>
         <thead>
@@ -224,7 +237,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($paddedLokasi as $index => $item)
+            @foreach($lokasiItems as $index => $item)
             <tr>
                 <td class="text-center" style="height:18px;">{{ $index + 1 }}</td>
                 <td>{{ $item['peristiwa']    ?? '' }}</td>
@@ -241,6 +254,20 @@
 
     {{-- ===== DOKUMENTASI ===== --}}
     <div class="section-title">DOKUMENTASI</div>
+    @php
+        // Support format lama (string) dan format baru (array JSON)
+        $dokumentasiItems = $report->dokumentasi ?? [];
+        if (is_string($dokumentasiItems)) {
+            // Format lama: wrap ke array agar tetap kompatibel
+            $dokumentasiItems = [[
+                'fotos'       => [$dokumentasiItems],
+                'keterangan'  => $report->keterangan_dokumentasi ?? '',
+            ]];
+        }
+        if (empty($dokumentasiItems)) {
+            $dokumentasiItems = [['fotos' => [], 'keterangan' => '']];
+        }
+    @endphp
     <table>
         <thead>
             <tr>
@@ -250,36 +277,70 @@
             </tr>
         </thead>
         <tbody>
+            @foreach($dokumentasiItems as $dokIndex => $dokItem)
             <tr>
-                <td class="text-center" style="vertical-align:middle;">1</td>
+                <td class="text-center" style="vertical-align:middle;">{{ $dokIndex + 1 }}</td>
                 <td class="text-center" style="padding:8px; vertical-align:middle;">
-                    @if($report->dokumentasi)
-                        @php
-                            $imgPath = storage_path('app/public/' . $report->dokumentasi);
-                            $imgBase64 = '';
-                            if (file_exists($imgPath)) {
-                                try {
-                                    $imgData = file_get_contents($imgPath);
-                                    $imgBase64 = 'data:image/' . pathinfo($imgPath, PATHINFO_EXTENSION) . ';base64,' . base64_encode($imgData);
-                                } catch (\Exception $e) {
-                                    // ignore
+                    @php
+                        // Ambil daftar foto (bisa dari key 'fotos' yang berupa array, atau fallback ke 'foto' tunggal)
+                        $fotos = $dokItem['fotos'] ?? [];
+                        if (is_string($fotos)) {
+                            $fotos = [$fotos];
+                        }
+                        if (empty($fotos) && !empty($dokItem['foto'])) {
+                            $fotos = [$dokItem['foto']];
+                        }
+                        
+                        $renderedImages = [];
+                        foreach ($fotos as $fotoPath) {
+                            if ($fotoPath) {
+                                $imgPath = storage_path('app/public/' . $fotoPath);
+                                if (file_exists($imgPath)) {
+                                    try {
+                                        $imgData = file_get_contents($imgPath);
+                                        $base64 = 'data:image/' . pathinfo($imgPath, PATHINFO_EXTENSION) . ';base64,' . base64_encode($imgData);
+                                        $renderedImages[] = [
+                                            'src' => $base64,
+                                            'error' => false
+                                        ];
+                                    } catch (\Exception $e) {
+                                        $renderedImages[] = [
+                                            'src' => null,
+                                            'error' => true,
+                                            'path' => $fotoPath
+                                        ];
+                                    }
+                                } else {
+                                    $renderedImages[] = [
+                                        'src' => null,
+                                        'error' => true,
+                                        'path' => $fotoPath
+                                    ];
                                 }
                             }
-                        @endphp
-                        @if($imgBase64)
-                            <img src="{{ $imgBase64 }}"
-                                 style="max-width:100%; max-height:160px; object-fit:contain;">
-                        @else
-                            <span style="color:red; font-size:8px;">File tidak ditemukan atau tidak dapat dibaca</span>
-                        @endif
+                        }
+                    @endphp
+
+                    @if(!empty($renderedImages))
+                        <div style="text-align: center;">
+                            @foreach($renderedImages as $image)
+                                @if($image['src'])
+                                    <img src="{{ $image['src'] }}"
+                                         style="max-width: 46%; max-height: 110px; display: inline-block; margin: 3px; vertical-align: middle; border: 0.5px solid #ccc; padding: 2px;">
+                                @else
+                                    <div style="color:red; font-size:8px; margin: 4px; display: block; clear: both;">File tidak ditemukan/tidak dapat dibaca ({{ basename($image['path']) }})</div>
+                                @endif
+                            @endforeach
+                        </div>
                     @else
                         <span style="color:gray; font-size:8px;">Tidak ada foto dokumentasi</span>
                     @endif
                 </td>
                 <td class="text-justify" style="line-height:1.4; padding:8px; font-size:9.5px;">
-                    {!! nl2br(e($report->keterangan_dokumentasi)) !!}
+                    {!! nl2br(e($dokItem['keterangan'] ?? '')) !!}
                 </td>
             </tr>
+            @endforeach
         </tbody>
     </table>
 

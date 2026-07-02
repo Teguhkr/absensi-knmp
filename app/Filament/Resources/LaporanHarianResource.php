@@ -112,20 +112,32 @@ class LaporanHarianResource extends Resource
                         ]),
 
                     Section::make('Dokumentasi Kegiatan')
+                        ->description('Tambahkan foto dan keterangan untuk setiap dokumentasi kegiatan')
                         ->schema([
-                            Forms\Components\FileUpload::make('dokumentasi')
-                                ->label('Foto Dokumentasi')
-                                ->disk('public')
-                                ->directory('laporan/dokumentasi')
-                                ->image()
-                                ->required()
-                                ->columnSpanFull(),
-                            Forms\Components\Textarea::make('keterangan_dokumentasi')
-                                ->label('Keterangan Dokumentasi (Uraian Detail Kegiatan)')
-                                ->placeholder('Masukkan penjelasan detail mengenai kegiatan hari ini...')
-                                ->required()
-                                ->rows(6)
-                                ->columnSpanFull(),
+                            Forms\Components\Repeater::make('dokumentasi')
+                                ->label('Daftar Dokumentasi')
+                                ->schema([
+                                    Forms\Components\FileUpload::make('fotos')
+                                        ->label('Foto Dokumentasi')
+                                        ->disk('public')
+                                        ->directory('laporan/dokumentasi')
+                                        ->image()
+                                        ->multiple()
+                                        ->reorderable()
+                                        ->required()
+                                        ->columnSpanFull(),
+                                    Forms\Components\Textarea::make('keterangan')
+                                        ->label('Keterangan (Uraian Detail Kegiatan)')
+                                        ->placeholder('Masukkan penjelasan detail mengenai kegiatan ini...')
+                                        ->required()
+                                        ->rows(4)
+                                        ->columnSpanFull(),
+                                ])
+                                ->default([
+                                    ['fotos' => [], 'keterangan' => '']
+                                ])
+                                ->columnSpanFull()
+                                ->createItemButtonLabel('Tambah Dokumentasi'),
                         ]),
                 ])->columnSpan(1),
             ])
@@ -155,9 +167,9 @@ class LaporanHarianResource extends Resource
                 Tables\Columns\TextColumn::make('operasional')
                     ->label('Jumlah Kegiatan')
                     ->getStateUsing(fn ($record) => count($record->operasional ?? []) . ' kegiatan'),
-                Tables\Columns\TextColumn::make('keterangan_dokumentasi')
-                    ->label('Keterangan')
-                    ->limit(40),
+                Tables\Columns\TextColumn::make('dokumentasi_count')
+                    ->label('Jumlah Dokumentasi')
+                    ->getStateUsing(fn ($record) => count($record->dokumentasi ?? []) . ' foto'),
             ])
             ->defaultSort('tanggal', 'desc')
             ->filters([
