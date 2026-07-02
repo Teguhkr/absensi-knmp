@@ -232,6 +232,37 @@
                         <span id="clock-seconds" class="seconds-neon">00</span>
                     </div>
                 </div>
+
+                {{-- Box Quote Lucu / Motivasi Kantor --}}
+                @php
+                    $quotes = [
+                        "Kerja keraslah sampai tetangga mengira kamu pelihara tuyul. 💸",
+                        "Absen pagi adalah bukti fisik bahwa tubuhmu sudah bangun, tapi pikiranmu masih loading... 🤖",
+                        "Kerjaan numpuk? Tenang, kalau tidak dikerjakan, nanti juga hilang... (dari daftar karyawan). 🤭",
+                        "Pura-pura produktif adalah skill bertahan hidup nomor satu di kantor. 🤫",
+                        "GPS aktif, hati aktif, tapi kopi belum diminum. Status: Siaga 1! ☕",
+                        "Presensi berhasil! Hari ini Anda resmi menjadi penyumbang kebahagiaan bagi dompet sendiri. 💼",
+                        "Pekerjaan tidak akan pernah selesai jika terus dikeluhkan. Tapi kalau kamu tidur, minimal kamu gak sadar. 💤",
+                        "Hari ini hari baik untuk mulai produktif. Kalau gagal, coba lagi besok. Kalau gagal terus, ya sudahlah. 🤷‍♂️",
+                        "Jangan lupa senyum hari ini, setidaknya buat admin HRD senang melihat wajah ceria Anda di peta. 😊",
+                        "Kerja itu ibarat mandi, kadang malas mulainya, tapi kalau sudah di dalam rasanya pengen cepet kelar. 🚿"
+                    ];
+                    $randomQuote = $quotes[array_rand($quotes)];
+                @endphp
+                <div style="
+                    margin-top: 6px;
+                    padding: 8px 12px;
+                    background: #f8fafc;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 8px;
+                    max-width: 90%;
+                    text-align: center;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+                ">
+                    <span style="font-size: 0.72rem; font-style: italic; color: #475569; line-height: 1.4;">
+                        "{!! $randomQuote !!}"
+                    </span>
+                </div>
             </div>
 
             {{-- Peta Interaktif --}}
