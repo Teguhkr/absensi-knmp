@@ -157,7 +157,7 @@ class LaporanHarianResource extends Resource
                     ->getStateUsing(fn ($record) => count($record->operasional ?? []) . ' kegiatan'),
                 Tables\Columns\TextColumn::make('dokumentasi_count')
                     ->label('Jumlah Dokumentasi')
-                    ->getStateUsing(fn ($record) => count($record->dokumentasi ?? []) . ' foto'),
+                    ->getStateUsing(fn ($record) => count($record->dokumentasi ?? []) . ' dokumentasi'),
             ])
             ->defaultSort('tanggal', 'desc')
             ->actions([
