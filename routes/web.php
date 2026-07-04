@@ -24,5 +24,13 @@ Route::get('/riwayat-absensi/pdf', [RiwayatAbsensiPdfController::class, 'downloa
     ->name('riwayat-absensi.pdf')
     ->middleware(['auth']);
 
+use App\Http\Controllers\PushSubscriptionController;
+
+// Route untuk push notifications subskripsi browser
+Route::middleware(['auth'])->group(function () {
+    Route::post('/push-subscriptions', [PushSubscriptionController::class, 'store'])->name('push-subscriptions.store');
+    Route::post('/push-subscriptions/delete', [PushSubscriptionController::class, 'destroy'])->name('push-subscriptions.destroy');
+});
+
 
 // Route bawaan Breeze kita hilangkan karena tidak digunakan (Autentikasi di-handle oleh Filament)
