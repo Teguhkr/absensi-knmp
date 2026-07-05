@@ -258,15 +258,49 @@ class AbsensiSaya extends Page
             $keteranganUpdate      = $keteranganUpdate ? $keteranganUpdate . '; ' . $catatanPulangCepat : $catatanPulangCepat;
         }
 
-        $this->absensiHariIni->update([
+        // === OPSI B: Deteksi skenario campuran (masuk kantor, pulang di lokasi penugasan) ===
+        // Jika saat pulang ada penugasan aktif, TAPI saat masuk statusnya bukan 'dinas'
+        // (artinya masuk dilakukan sebelum SPT ada / masuk di kantor), maka update status ke 'dinas'
+        $statusUpdate = null; // null = tidak update status
+        $statusMasuk  = $this->absensiHariIni->status;
+
+        if ($this->penugasanAktif && in_array($statusMasuk, ['hadir', 'terlambat'])) {
+            $statusUpdate = 'dinas';
+
+            // Tambahkan keterangan campuran
+            $infoSpt       = $this->penugasanAktif->nomor_spt
+                ? ' (No. SPT: ' . $this->penugasanAktif->nomor_spt . ')'
+                : '';
+            $catatanCampuran = 'Masuk di kantor; Penugasan mulai siang hari' . $infoSpt;
+            $keteranganUpdate = $keteranganUpdate
+                ? $keteranganUpdate . '; ' . $catatanCampuran
+                : $catatanCampuran;
+        }
+
+        $dataUpdate = [
             'jam_pulang'       => $now->toTimeString(),
             'latitude_pulang'  => $latPulang,
             'longitude_pulang' => $lngPulang,
             'keterangan'       => $keteranganUpdate,
-        ]);
+        ];
+
+        // Hanya update status jika ada perubahan status (skenario campuran)
+        if ($statusUpdate !== null) {
+            $dataUpdate['status'] = $statusUpdate;
+        }
+
+        $this->absensiHariIni->update($dataUpdate);
+
+        $pesanSukses = 'Presensi Pulang Berhasil!';
+        if ($isPulangCepat) {
+            $pesanSukses .= ' (Dicatat Pulang Cepat)';
+        }
+        if ($statusUpdate === 'dinas') {
+            $pesanSukses .= ' — Status diperbarui ke Penugasan karena pulang di lokasi SPT.';
+        }
 
         Notification::make()->success()
-            ->title('Presensi Pulang Berhasil!' . ($isPulangCepat ? ' (Dicatat Pulang Cepat)' : ''))
+            ->title($pesanSukses)
             ->send();
         $this->confirmPulangCepat = false;
         $this->loadAbsensiHariIni();
