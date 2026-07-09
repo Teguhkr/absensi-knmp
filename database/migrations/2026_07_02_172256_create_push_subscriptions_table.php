@@ -7,13 +7,19 @@ use Illuminate\Database\Migrations\Migration;
 return new class extends Migration
 {
     /**
+     * Nama tabel di-hardcode agar tidak bergantung pada config webpush.php
+     * yang mungkin belum dipublish di server.
+     */
+    protected string $tableName = 'push_subscriptions';
+
+    /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::connection(config('webpush.database_connection'))->create(config('webpush.table_name'), function (Blueprint $table) {
+        Schema::create($this->tableName, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->morphs('subscribable', 'push_subscriptions_subscribable_morph_idx');
             $table->string('endpoint', 500)->unique();
@@ -31,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::connection(config('webpush.database_connection'))->dropIfExists(config('webpush.table_name'));
+        Schema::dropIfExists($this->tableName);
     }
 };
