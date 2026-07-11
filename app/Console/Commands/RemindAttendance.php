@@ -41,12 +41,16 @@ class RemindAttendance extends Command
         $currentTime = $now->format('H:i');
 
         // Ambil pengaturan jam masuk & pulang dari database PengaturanSistem
-        $jamMasukSetting = PengaturanSistem::get('jam_masuk', '07:00');
-        $jamPulangSetting = PengaturanSistem::get('jam_pulang', '17:00');
+        $jamMasukSettingRaw = PengaturanSistem::get('jam_masuk', '07:00');
+        $jamPulangSettingRaw = PengaturanSistem::get('jam_pulang', '17:00');
+
+        // Format ke H:i agar perbandingan string selalu akurat meskipun di DB tersimpan dengan/tanpa detik
+        $jamMasukSetting = Carbon::parse($jamMasukSettingRaw)->format('H:i');
+        $jamPulangSetting = Carbon::parse($jamPulangSettingRaw)->format('H:i');
 
         $this->info("Waktu sekarang: {$currentTime} (Hari: " . $now->translatedFormat('l') . ")");
-        $this->info("Pengaturan Jam Masuk: {$jamMasukSetting}");
-        $this->info("Pengaturan Jam Pulang: {$jamPulangSetting}");
+        $this->info("Pengaturan Jam Masuk: {$jamMasukSetting} (Raw DB: {$jamMasukSettingRaw})");
+        $this->info("Pengaturan Jam Pulang: {$jamPulangSetting} (Raw DB: {$jamPulangSettingRaw})");
 
         // Jika dipaksa (--force atau ada user target) dan type ditentukan, langsung kirim spesifik
         if (($force || $userOption) && $type) {
@@ -139,7 +143,7 @@ class RemindAttendance extends Command
 
                     // 2. Cek apakah sudah absen masuk hari ini
                     $hasAbsenMasuk = Absensi::where('user_id', $employee->id)
-                        ->whereDate('created_at', $todayStr)
+                        ->whereDate('tanggal', $todayStr)
                         ->whereNotNull('jam_masuk')
                         ->exists();
 
@@ -160,7 +164,7 @@ class RemindAttendance extends Command
                 if (!$isSingleUserTest) {
                     // 1. Cek apakah sudah absen masuk tetapi belum absen pulang hari ini
                     $hasAbsenMasukWithoutPulang = Absensi::where('user_id', $employee->id)
-                        ->whereDate('created_at', $todayStr)
+                        ->whereDate('tanggal', $todayStr)
                         ->whereNotNull('jam_masuk')
                         ->whereNull('jam_pulang')
                         ->exists();
