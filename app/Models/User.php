@@ -28,6 +28,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         'foto',
         'qr_token',
         'is_active',
+        'latitude',
+        'longitude',
     ];
 
     protected $hidden = [
@@ -41,6 +43,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'latitude' => 'float',
+            'longitude' => 'float',
         ];
     }
 

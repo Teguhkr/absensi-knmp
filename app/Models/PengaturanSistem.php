@@ -55,10 +55,12 @@ class PengaturanSistem extends Model
     /**
      * Cek apakah koordinat dalam radius kantor.
      */
-    public static function dalamRadius(float $lat, float $lng): bool
+    public static function dalamRadius(float $lat, float $lng, ?User $user = null): bool
     {
-        $kantorLat    = (float) static::get('kantor_latitude', 0);
-        $kantorLng    = (float) static::get('kantor_longitude', 0);
+        $user = $user ?? auth()->user();
+
+        $kantorLat    = ($user && $user->latitude !== null) ? (float) $user->latitude : (float) static::get('kantor_latitude', 0);
+        $kantorLng    = ($user && $user->longitude !== null) ? (float) $user->longitude : (float) static::get('kantor_longitude', 0);
         $radiusMeter  = (float) static::get('radius_absensi', 500);
 
         if ($kantorLat === 0.0 && $kantorLng === 0.0) {

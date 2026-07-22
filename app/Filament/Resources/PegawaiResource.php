@@ -88,6 +88,23 @@ class PegawaiResource extends Resource
                         ->imageResizeTargetHeight(300)
                         ->columnSpanFull(),
                 ]),
+
+            Section::make('Lokasi Kantor Khusus (Opsional)')
+                ->description('Kosongkan jika menggunakan lokasi kantor default dari pengaturan sistem.')
+                ->schema([
+                    Forms\Components\TextInput::make('latitude')
+                        ->label('Latitude Kantor Khusus')
+                        ->numeric()
+                        ->placeholder('Contoh: -6.200000')
+                        ->step('any')
+                        ->nullable(),
+                    Forms\Components\TextInput::make('longitude')
+                        ->label('Longitude Kantor Khusus')
+                        ->numeric()
+                        ->placeholder('Contoh: 106.816666')
+                        ->step('any')
+                        ->nullable(),
+                ])->columns(2),
         ]);
     }
 

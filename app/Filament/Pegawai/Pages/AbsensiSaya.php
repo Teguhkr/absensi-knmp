@@ -41,8 +41,14 @@ class AbsensiSaya extends Page
     public function mount()
     {
         $this->loadAbsensiHariIni();
-        $this->kantorLatitude  = (float) PengaturanSistem::get('kantor_latitude', 0);
-        $this->kantorLongitude = (float) PengaturanSistem::get('kantor_longitude', 0);
+        $user = Auth::user();
+        if ($user && $user->latitude !== null && $user->longitude !== null) {
+            $this->kantorLatitude  = (float) $user->latitude;
+            $this->kantorLongitude = (float) $user->longitude;
+        } else {
+            $this->kantorLatitude  = (float) PengaturanSistem::get('kantor_latitude', 0);
+            $this->kantorLongitude = (float) PengaturanSistem::get('kantor_longitude', 0);
+        }
         $this->radiusAbsensi   = (float) PengaturanSistem::get('radius_absensi', 500);
         $this->checkPenugasanAktif();
     }
@@ -389,7 +395,7 @@ class AbsensiSaya extends Page
             return false;
         }
 
-        if ($validasiGps && !PengaturanSistem::dalamRadius((float) $this->latitude, (float) $this->longitude)) {
+        if ($validasiGps && !PengaturanSistem::dalamRadius((float) $this->latitude, (float) $this->longitude, Auth::user())) {
             Notification::make()->danger()->title('Anda berada di luar radius kantor yang diizinkan!')->send();
             return false;
         }
