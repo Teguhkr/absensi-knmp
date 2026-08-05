@@ -53,12 +53,22 @@ class AbsensiSaya extends Page
         $this->checkPenugasanAktif();
     }
 
+    public function getUserTimezone(): string
+    {
+        $user = Auth::user();
+        if ($this->latitude !== null && $this->longitude !== null) {
+            return $user ? $user->detectAndUpdateTimezone((float)$this->latitude, (float)$this->longitude) : 'Asia/Jakarta';
+        }
+        return $user?->timezone ?? 'Asia/Jakarta';
+    }
+
     /**
      * Cek apakah pegawai sedang dalam penugasan (Izin Dinas) yang aktif hari ini
      */
     public function checkPenugasanAktif(): void
     {
-        $today = Carbon::today()->toDateString();
+        $userTz = $this->getUserTimezone();
+        $today  = Carbon::now($userTz)->toDateString();
         $this->penugasanAktif = Izin::where('user_id', Auth::id())
             ->where('jenis', 'dinas')
             ->where('status', 'approved')
@@ -69,7 +79,8 @@ class AbsensiSaya extends Page
 
     public function loadAbsensiHariIni(): void
     {
-        $this->absensiHariIni = Absensi::getAbsensiHariIni(Auth::id());
+        $userTz = $this->getUserTimezone();
+        $this->absensiHariIni = Absensi::getAbsensiHariIni(Auth::id(), $userTz);
 
         if ($this->absensiHariIni) {
             if ($this->absensiHariIni->jam_pulang) {
@@ -135,8 +146,9 @@ class AbsensiSaya extends Page
             return;
         }
 
-        $now             = Carbon::now();
-        $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
+        $userTz          = $this->getUserTimezone();
+        $now             = Carbon::now($userTz);
+        $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'), $userTz);
         $toleransi       = (int) PengaturanSistem::get('toleransi_menit', 15);
         $batasTerlambat  = $jamMasukStandar->copy()->addMinutes($toleransi);
 
@@ -233,10 +245,11 @@ class AbsensiSaya extends Page
             return;
         }
 
-        $now              = Carbon::now();
-        $jamMasuk         = Carbon::createFromTimeString($this->absensiHariIni->jam_masuk);
-        $jamMasukStandar  = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
-        $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'));
+        $userTz           = $this->getUserTimezone();
+        $now              = Carbon::now($userTz);
+        $jamMasuk         = Carbon::createFromTimeString($this->absensiHariIni->jam_masuk, $userTz);
+        $jamMasukStandar  = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'), $userTz);
+        $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'), $userTz);
 
         $durasiStandarMenit = $jamMasukStandar->diffInMinutes($jamPulangStandar);
         $durasiAktualMenit  = $jamMasuk->diffInMinutes($now);

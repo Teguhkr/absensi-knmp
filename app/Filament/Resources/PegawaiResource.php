@@ -70,6 +70,16 @@ class PegawaiResource extends Resource
                         ->label('Nomor HP')
                         ->tel()
                         ->maxLength(20),
+                    Forms\Components\Select::make('timezone')
+                        ->label('Zona Waktu Default')
+                        ->options([
+                            'Asia/Jakarta'  => 'WIB - Indonesia Barat (UTC+7)',
+                            'Asia/Makassar' => 'WITA - Indonesia Tengah (UTC+8)',
+                            'Asia/Jayapura' => 'WIT - Indonesia Timur (UTC+9)',
+                        ])
+                        ->default('Asia/Jakarta')
+                        ->required()
+                        ->helperText('Otomatis dideteksi dari GPS pegawai saat presensi.'),
                     Forms\Components\Toggle::make('is_active')
                         ->label('Status Aktif')
                         ->default(true),
@@ -133,6 +143,13 @@ class PegawaiResource extends Resource
                     ->searchable()
                     ->badge()
                     ->color('info'),
+                Tables\Columns\BadgeColumn::make('timezone_code')
+                    ->label('Zona Waktu')
+                    ->colors([
+                        'info'    => 'WIB',
+                        'warning' => 'WITA',
+                        'success' => 'WIT',
+                    ]),
                 Tables\Columns\BadgeColumn::make('role')
                     ->label('Role')
                     ->colors([
@@ -148,6 +165,13 @@ class PegawaiResource extends Resource
                     ->options([
                         'admin'   => 'Admin',
                         'pegawai' => 'Pegawai',
+                    ]),
+                Tables\Filters\SelectFilter::make('timezone')
+                    ->label('Zona Waktu')
+                    ->options([
+                        'Asia/Jakarta'  => 'WIB (Asia/Jakarta)',
+                        'Asia/Makassar' => 'WITA (Asia/Makassar)',
+                        'Asia/Jayapura' => 'WIT (Asia/Jayapura)',
                     ]),
                 Tables\Filters\SelectFilter::make('departemen')
                     ->options(fn () => User::whereNotNull('departemen')->pluck('departemen', 'departemen')->toArray())

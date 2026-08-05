@@ -75,10 +75,17 @@ class Absensi extends Model
         return $diff->format('%H jam %I menit');
     }
 
-    public static function getAbsensiHariIni(int $userId): ?self
+    public static function getAbsensiHariIni(int $userId, ?string $timezone = null): ?self
     {
+        if (!$timezone) {
+            $user = User::find($userId);
+            $timezone = $user?->timezone ?? config('app.timezone', 'Asia/Jakarta');
+        }
+
+        $today = Carbon::now($timezone)->toDateString();
+
         return static::where('user_id', $userId)
-            ->whereDate('tanggal', Carbon::today()->toDateString())
+            ->whereDate('tanggal', $today)
             ->first();
     }
 }

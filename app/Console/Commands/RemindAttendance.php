@@ -97,13 +97,13 @@ class RemindAttendance extends Command
     {
         $userOption = $this->option('user');
         $isSingleUserTest = !empty($userOption);
+        $force = $this->option('force');
 
-        // Cache lock agar tidak terkirim ganda di menit yang sama (jika scheduler dipanggil rapat)
-        $lockKey = "remind_attendance_{$type}_{$todayStr}";
-        if (Cache::has($lockKey) && !$this->option('force') && !$isSingleUserTest) {
-            $this->info("Notifikasi tipe '{$type}' untuk hari ini sudah pernah dikirim.");
-            return;
-        }
+        // Ambil pengaturan jam masuk & pulang
+        $jamMasukSettingRaw  = PengaturanSistem::get('jam_masuk', '07:00');
+        $jamPulangSettingRaw = PengaturanSistem::get('jam_pulang', '17:00');
+        $jamMasukTarget      = Carbon::parse($jamMasukSettingRaw)->format('H:i');
+        $jamPulangTarget     = Carbon::parse($jamPulangSettingRaw)->format('H:i');
 
         // Filter user jika mengirim ke 1 user saja
         if ($isSingleUserTest) {
@@ -125,6 +125,25 @@ class RemindAttendance extends Command
         $sentCount = 0;
 
         foreach ($employees as $employee) {
+            $empTz          = $employee->timezone ?? 'Asia/Jakarta';
+            $empNow         = Carbon::now($empTz);
+            $empTodayStr    = $empNow->toDateString();
+            $empCurrentTime = $empNow->format('H:i');
+
+            // Cache lock per user agar tidak terkirim ganda di hari yang sama
+            $lockKey = "remind_attendance_{$type}_{$employee->id}_{$empTodayStr}";
+            if (Cache::has($lockKey) && !$force && !$isSingleUserTest) {
+                continue;
+            }
+
+            // Jika dipanggil via cron reguler (tanpa --force / --user), verifikasi waktu lokal pegawai
+            if (!$force && !$isSingleUserTest) {
+                $targetTime = ($type === 'masuk') ? $jamMasukTarget : $jamPulangTarget;
+                if ($empCurrentTime !== $targetTime) {
+                    continue;
+                }
+            }
+
             if ($type === 'masuk') {
                 // Jika testing 1 orang, lewati filter skip cuti/absen
                 if (!$isSingleUserTest) {
@@ -132,8 +151,8 @@ class RemindAttendance extends Command
                     $hasApprovedIzin = Izin::where('user_id', $employee->id)
                         ->where('status', 'approved')
                         ->whereIn('jenis', ['cuti', 'sakit', 'izin'])
-                        ->where('tanggal_mulai', '<=', $todayStr)
-                        ->where('tanggal_selesai', '>=', $todayStr)
+                        ->where('tanggal_mulai', '<=', $empTodayStr)
+                        ->where('tanggal_selesai', '>=', $empTodayStr)
                         ->exists();
 
                     if ($hasApprovedIzin) {
@@ -143,7 +162,7 @@ class RemindAttendance extends Command
 
                     // 2. Cek apakah sudah absen masuk hari ini
                     $hasAbsenMasuk = Absensi::where('user_id', $employee->id)
-                        ->whereDate('tanggal', $todayStr)
+                        ->whereDate('tanggal', $empTodayStr)
                         ->whereNotNull('jam_masuk')
                         ->exists();
 
@@ -154,17 +173,18 @@ class RemindAttendance extends Command
                 }
 
                 // Kirim Notifikasi Pengingat Masuk
-                $title = "⏰ Waktunya Presensi Masuk!";
-                $message = "Halo {$employee->name}, saat ini sudah memasuki jam kerja. Jangan lupa untuk melakukan presensi masuk hari ini ya! Semangat!";
+                $title   = "⏰ Waktunya Presensi Masuk!";
+                $message = "Halo {$employee->name}, saat ini sudah memasuki jam kerja ({$empCurrentTime} {$employee->timezone_code}). Jangan lupa untuk melakukan presensi masuk hari ini ya! Semangat!";
                 
                 $employee->notify(new AttendanceReminderNotification($type, $title, $message));
+                Cache::put($lockKey, true, $empNow->endOfDay());
                 $sentCount++;
 
             } elseif ($type === 'pulang') {
                 if (!$isSingleUserTest) {
                     // 1. Cek apakah sudah absen masuk tetapi belum absen pulang hari ini
                     $hasAbsenMasukWithoutPulang = Absensi::where('user_id', $employee->id)
-                        ->whereDate('tanggal', $todayStr)
+                        ->whereDate('tanggal', $empTodayStr)
                         ->whereNotNull('jam_masuk')
                         ->whereNull('jam_pulang')
                         ->exists();
@@ -176,17 +196,15 @@ class RemindAttendance extends Command
                 }
 
                 // Kirim Notifikasi Pengingat Pulang
-                $title = "👋 Waktunya Presensi Pulang!";
-                $message = "Halo {$employee->name}, sudah waktunya jam pulang. Sebelum pulang, pastikan Anda melakukan presensi pulang terlebih dahulu ya!";
+                $title   = "👋 Waktunya Presensi Pulang!";
+                $message = "Halo {$employee->name}, sudah waktunya jam pulang ({$empCurrentTime} {$employee->timezone_code}). Sebelum pulang, pastikan Anda melakukan presensi pulang terlebih dahulu ya!";
                 
                 $employee->notify(new AttendanceReminderNotification($type, $title, $message));
+                Cache::put($lockKey, true, $empNow->endOfDay());
                 $sentCount++;
             }
         }
 
         $this->info("Berhasil mengirimkan {$sentCount} notifikasi pengingat {$type}.");
-        
-        // Simpan kunci lock agar tidak mengirim ulang hari ini
-        Cache::put($lockKey, true, now()->endOfDay());
     }
 }

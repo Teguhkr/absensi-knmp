@@ -30,6 +30,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         'is_active',
         'latitude',
         'longitude',
+        'timezone',
     ];
 
     protected $hidden = [
@@ -41,11 +42,52 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_active' => 'boolean',
-            'latitude' => 'float',
-            'longitude' => 'float',
+            'password'          => 'hashed',
+            'is_active'         => 'boolean',
+            'latitude'          => 'float',
+            'longitude'         => 'float',
         ];
+    }
+
+    public static function getTimezoneFromCoordinates(?float $lat, ?float $lng, ?string $fallbackTz = 'Asia/Jakarta'): string
+    {
+        if ($lng === null) {
+            return $fallbackTz ?: 'Asia/Jakarta';
+        }
+        if ($lng >= 124.5) {
+            return 'Asia/Jayapura';
+        } elseif ($lng >= 114.0) {
+            return 'Asia/Makassar';
+        } else {
+            return 'Asia/Jakarta';
+        }
+    }
+
+    public function getTimezoneCodeAttribute(): string
+    {
+        return match ($this->timezone) {
+            'Asia/Makassar' => 'WITA',
+            'Asia/Jayapura' => 'WIT',
+            default         => 'WIB',
+        };
+    }
+
+    public function getTimezoneLabelAttribute(): string
+    {
+        return match ($this->timezone) {
+            'Asia/Makassar' => 'WITA (UTC+8)',
+            'Asia/Jayapura' => 'WIT (UTC+9)',
+            default         => 'WIB (UTC+7)',
+        };
+    }
+
+    public function detectAndUpdateTimezone(?float $lat, ?float $lng): string
+    {
+        $tz = static::getTimezoneFromCoordinates($lat, $lng, $this->timezone ?: 'Asia/Jakarta');
+        if ($this->timezone !== $tz) {
+            $this->update(['timezone' => $tz]);
+        }
+        return $tz;
     }
 
     protected static function boot()

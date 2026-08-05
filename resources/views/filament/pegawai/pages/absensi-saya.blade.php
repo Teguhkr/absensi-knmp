@@ -7,14 +7,20 @@
     {{-- ============= CARD KIRI: STATUS PRESENSI ============= --}}
     <div class="absensi-card">
 
-        <div class="absensi-card-header">
-            <svg style="width:17px;height:17px;min-width:17px;color:#0ea5e9;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <span style="font-size:0.8rem;color:#64748b;font-weight:500;">Status Hari Ini:</span>
-            <span style="font-size:0.8rem;font-weight:700;color:#0284c7;">
-                {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
-            </span>
+        <div class="absensi-card-header" style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:6px;">
+                <svg style="width:17px;height:17px;min-width:17px;color:#0ea5e9;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <span style="font-size:0.8rem;color:#64748b;font-weight:500;">Status Hari Ini:</span>
+                <span style="font-size:0.8rem;font-weight:700;color:#0284c7;">
+                    {{ \Carbon\Carbon::now(auth()->user()->timezone ?? 'Asia/Jakarta')->translatedFormat('l, d F Y') }}
+                </span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px;background:#e0f2fe;color:#0369a1;padding:3px 8px;border-radius:999px;font-size:0.7rem;font-weight:700;">
+                <span>📍 {{ auth()->user()->timezone_code }}</span>
+                <span style="font-size:0.65rem;font-weight:500;opacity:0.8;">({{ auth()->user()->timezone_label }})</span>
+            </div>
         </div>
 
         <div class="absensi-card-body">
@@ -358,17 +364,42 @@
 @script
 <script>
     // ===== Live Clock =====
+    const userTimezone = "{{ auth()->user()->timezone ?? 'Asia/Jakarta' }}";
+
     function updateClock() {
         const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const s = String(now.getSeconds()).padStart(2, '0');
-        const elH = document.getElementById('clock-hours');
-        const elM = document.getElementById('clock-minutes');
-        const elS = document.getElementById('clock-seconds');
-        if (elH) elH.innerText = h;
-        if (elM) elM.innerText = m;
-        if (elS) elS.innerText = s;
+        try {
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: userTimezone,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            const parts = formatter.formatToParts(now);
+            let h = '00', m = '00', s = '00';
+            for (const p of parts) {
+                if (p.type === 'hour') h = p.value === '24' ? '00' : p.value;
+                if (p.type === 'minute') m = p.value;
+                if (p.type === 'second') s = p.value;
+            }
+            const elH = document.getElementById('clock-hours');
+            const elM = document.getElementById('clock-minutes');
+            const elS = document.getElementById('clock-seconds');
+            if (elH) elH.innerText = h;
+            if (elM) elM.innerText = m;
+            if (elS) elS.innerText = s;
+        } catch (e) {
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            const elH = document.getElementById('clock-hours');
+            const elM = document.getElementById('clock-minutes');
+            const elS = document.getElementById('clock-seconds');
+            if (elH) elH.innerText = h;
+            if (elM) elM.innerText = m;
+            if (elS) elS.innerText = s;
+        }
     }
     updateClock();
     setInterval(updateClock, 1000);

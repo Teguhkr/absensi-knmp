@@ -294,11 +294,34 @@
                         $renderedImages = [];
                         foreach ($fotos as $fotoPath) {
                             if ($fotoPath) {
-                                $imgPath = storage_path('app/public/' . $fotoPath);
-                                if (file_exists($imgPath)) {
+                                // Clean livewire-file: prefix if present
+                                $cleanPath = str_replace('livewire-file:', '', $fotoPath);
+                                $filename = basename($cleanPath);
+
+                                $possiblePaths = [
+                                    storage_path('app/public/' . $cleanPath),
+                                    storage_path('app/public/laporan/dokumentasi/' . $filename),
+                                    storage_path('app/private/livewire-tmp/' . $filename),
+                                    storage_path('app/livewire-tmp/' . $filename),
+                                    storage_path('app/' . $cleanPath),
+                                    public_path('storage/' . $cleanPath),
+                                    public_path('storage/laporan/dokumentasi/' . $filename),
+                                    public_path($cleanPath),
+                                ];
+
+                                $imgPath = null;
+                                foreach ($possiblePaths as $p) {
+                                    if (file_exists($p) && !is_dir($p)) {
+                                        $imgPath = $p;
+                                        break;
+                                    }
+                                }
+
+                                if ($imgPath) {
                                     try {
                                         $imgData = file_get_contents($imgPath);
-                                        $base64 = 'data:image/' . pathinfo($imgPath, PATHINFO_EXTENSION) . ';base64,' . base64_encode($imgData);
+                                        $ext = pathinfo($imgPath, PATHINFO_EXTENSION) ?: 'jpeg';
+                                        $base64 = 'data:image/' . $ext . ';base64,' . base64_encode($imgData);
                                         $renderedImages[] = [
                                             'src' => $base64,
                                             'error' => false
@@ -328,7 +351,7 @@
                                     <img src="{{ $image['src'] }}"
                                          style="max-width: 46%; max-height: 110px; display: inline-block; margin: 3px; vertical-align: middle; border: 0.5px solid #ccc; padding: 2px;">
                                 @else
-                                    <div style="color:red; font-size:8px; margin: 4px; display: block; clear: both;">File tidak ditemukan/tidak dapat dibaca ({{ basename($image['path']) }})</div>
+                                    <div style="color:red; font-size:8px; margin: 4px; display: block; clear: both;">File tidak ditemukan/tidak dapat dibaca ({{ basename($image['path']) }}). Silakan upload ulang foto pada laporan ini.</div>
                                 @endif
                             @endforeach
                         </div>

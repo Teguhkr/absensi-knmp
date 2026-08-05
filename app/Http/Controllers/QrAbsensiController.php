@@ -18,14 +18,15 @@ class QrAbsensiController extends Controller
             abort(404, 'QR Code tidak valid atau Pegawai tidak aktif.');
         }
 
-        $absensiHariIni = Absensi::getAbsensiHariIni($pegawai->id);
+        $tz = $pegawai->timezone ?? 'Asia/Jakarta';
+        $absensiHariIni = Absensi::getAbsensiHariIni($pegawai->id, $tz);
 
         $warningPulangCepat = null;
         if ($absensiHariIni && $absensiHariIni->jam_masuk && !$absensiHariIni->jam_pulang) {
-            $now = Carbon::now();
-            $jamMasuk = Carbon::createFromTimeString($absensiHariIni->jam_masuk);
-            $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
-            $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'));
+            $now = Carbon::now($tz);
+            $jamMasuk = Carbon::createFromTimeString($absensiHariIni->jam_masuk, $tz);
+            $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'), $tz);
+            $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'), $tz);
             
             $durasiStandarMenit = $jamMasukStandar->diffInMinutes($jamPulangStandar);
             $durasiAktualMenit = $jamMasuk->diffInMinutes($now);
@@ -53,8 +54,9 @@ class QrAbsensiController extends Controller
             return back()->with('error', 'QR Code tidak valid.');
         }
 
-        $now = Carbon::now();
-        $absensiHariIni = Absensi::getAbsensiHariIni($pegawai->id);
+        $tz = $pegawai->timezone ?? 'Asia/Jakarta';
+        $now = Carbon::now($tz);
+        $absensiHariIni = Absensi::getAbsensiHariIni($pegawai->id, $tz);
 
         // Jika tombol Absen Masuk ditekan
         if ($request->has('absen_masuk')) {
@@ -62,7 +64,7 @@ class QrAbsensiController extends Controller
                 return back()->with('error', 'Pegawai sudah melakukan absen masuk hari ini.');
             }
 
-            $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
+            $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'), $tz);
             $toleransi = (int) PengaturanSistem::get('toleransi_menit', 15);
             $batasTerlambat = $jamMasukStandar->copy()->addMinutes($toleransi);
             
@@ -93,9 +95,9 @@ class QrAbsensiController extends Controller
                 return back()->with('error', 'Pegawai sudah melakukan absen pulang.');
             }
 
-            $jamMasuk = Carbon::createFromTimeString($absensiHariIni->jam_masuk);
-            $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'));
-            $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'));
+            $jamMasuk = Carbon::createFromTimeString($absensiHariIni->jam_masuk, $tz);
+            $jamMasukStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_masuk', '08:00'), $tz);
+            $jamPulangStandar = Carbon::createFromTimeString(PengaturanSistem::get('jam_pulang', '16:00'), $tz);
             
             $durasiStandarMenit = $jamMasukStandar->diffInMinutes($jamPulangStandar);
             $durasiAktualMenit = $jamMasuk->diffInMinutes($now);
