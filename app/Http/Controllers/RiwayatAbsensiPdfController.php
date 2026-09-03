@@ -14,6 +14,9 @@ class RiwayatAbsensiPdfController extends Controller
 {
     public function download(Request $request)
     {
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
         $request->validate([
             'month' => 'required|string|size:2',
             'year'  => 'required|string|size:4',

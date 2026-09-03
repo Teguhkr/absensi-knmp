@@ -12,6 +12,9 @@ class LaporanHarianPdfController extends Controller
 {
     public function download(Request $request)
     {
+        ini_set('memory_limit', '512M');
+        set_time_limit(300);
+
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'month' => 'required|string|size:2',

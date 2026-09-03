@@ -319,13 +319,19 @@
 
                                 if ($imgPath) {
                                     try {
-                                        $imgData = file_get_contents($imgPath);
-                                        $ext = pathinfo($imgPath, PATHINFO_EXTENSION) ?: 'jpeg';
-                                        $base64 = 'data:image/' . $ext . ';base64,' . base64_encode($imgData);
-                                        $renderedImages[] = [
-                                            'src' => $base64,
-                                            'error' => false
-                                        ];
+                                        $base64 = \App\Helpers\PdfImageHelper::getCompressedBase64($imgPath, 500, 75);
+                                        if ($base64) {
+                                            $renderedImages[] = [
+                                                'src' => $base64,
+                                                'error' => false
+                                            ];
+                                        } else {
+                                            $renderedImages[] = [
+                                                'src' => null,
+                                                'error' => true,
+                                                'path' => $fotoPath
+                                            ];
+                                        }
                                     } catch (\Exception $e) {
                                         $renderedImages[] = [
                                             'src' => null,
