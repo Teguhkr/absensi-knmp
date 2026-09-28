@@ -12,6 +12,26 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class RiwayatAbsensiPdfController extends Controller
 {
+    public const PEJABAT_PEMBUAT_KOMITMEN = [
+        'Andi Cahyono, S.T' => 'Andi Cahyono, S.T',
+        'Agus Lubis Fitriansyah, S.T., M.T.' => 'Agus Lubis Fitriansyah, S.T., M.T.',
+        'Fauzan Idris Maspeke, S.T, M.Si' => 'Fauzan Idris Maspeke, S.T, M.Si',
+        'R. Tono Amboro, S.St.Pi., M.E.S.M.' => 'R. Tono Amboro, S.St.Pi., M.E.S.M.',
+        'Dicky Rachmanzah, S.E.' => 'Dicky Rachmanzah, S.E.',
+        'Bibin Wibisono, S.T.' => 'Bibin Wibisono, S.T.',
+        'Didik Sukoco S.E.' => 'Didik Sukoco S.E.',
+        'Hendra Pramono, S.St. Pi.' => 'Hendra Pramono, S.St. Pi.',
+        'Achmad Fauzie S.Pi, M.Si' => 'Achmad Fauzie S.Pi, M.Si',
+        'Arif Jaelani Al Mutaqin, S.E' => 'Arif Jaelani Al Mutaqin, S.E',
+        'Umar Soleh, S.Pi., M.Si.' => 'Umar Soleh, S.Pi., M.Si.',
+        'Yanwar Amri Yasman, S.St.Pi., M.Si.' => 'Yanwar Amri Yasman, S.St.Pi., M.Si.',
+    ];
+
+    public static function getPejabatPembuatKomitmenList(): array
+    {
+        return self::PEJABAT_PEMBUAT_KOMITMEN;
+    }
+
     public function download(Request $request)
     {
         ini_set('memory_limit', '512M');
@@ -20,10 +40,15 @@ class RiwayatAbsensiPdfController extends Controller
         $request->validate([
             'month' => 'required|string|size:2',
             'year'  => 'required|string|size:4',
+            'ppk'   => 'nullable|string',
         ]);
 
         $month = $request->query('month');
         $year  = $request->query('year');
+        $ppk   = $request->query('ppk', 'Fauzan Idris Maspeke, S.T, M.Si');
+        if (empty($ppk)) {
+            $ppk = 'Fauzan Idris Maspeke, S.T, M.Si';
+        }
 
         // Pegawai hanya bisa cetak milik sendiri
         $userId = Auth::id();
@@ -78,6 +103,7 @@ class RiwayatAbsensiPdfController extends Controller
             'endDate'       => $endDate,
             'rekap'         => $rekap,
             'instansi'      => $instansi,
+            'ppk'           => $ppk,
         ]);
 
         $pdf->setPaper('a4', 'portrait');

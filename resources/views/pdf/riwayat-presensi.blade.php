@@ -125,7 +125,7 @@
         .ttd-box {
             float: right;
             text-align: center;
-            width: 200px;
+            width: 240px;
         }
         .ttd-place {
             font-size: 10.5px;
@@ -136,6 +136,7 @@
             font-size: 11px;
             border-top: 1px solid #000;
             padding-top: 4px;
+            white-space: nowrap;
         }
         .ttd-jabatan {
             font-size: 10px;
@@ -362,7 +363,7 @@
             <div style="font-size: 10.5px; margin-bottom: 50px; margin-top: 4px;">
                 Mengetahui,
             </div>
-            <div class="ttd-name">Fauzan Idris Maspeke, S.T, M.Si</div>
+            <div class="ttd-name">{{ $ppk ?? 'Fauzan Idris Maspeke, S.T, M.Si' }}</div>
             <div class="ttd-jabatan">(Pejabat Pembuat Komitmen)</div>
         </div>
     </div>

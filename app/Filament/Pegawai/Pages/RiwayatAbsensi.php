@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Controllers\RiwayatAbsensiPdfController;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 
@@ -62,11 +63,18 @@ class RiwayatAbsensi extends Page implements HasTable
                         )
                         ->default(now()->year)
                         ->required(),
+                    Select::make('ppk')
+                        ->label('Pejabat Pembuat Komitmen (PPK)')
+                        ->options(RiwayatAbsensiPdfController::getPejabatPembuatKomitmenList())
+                        ->default('Fauzan Idris Maspeke, S.T, M.Si')
+                        ->searchable()
+                        ->required(),
                 ])
                 ->action(function (array $data) {
                     return redirect()->route('riwayat-absensi.pdf', [
                         'month' => $data['month'],
                         'year'  => $data['year'],
+                        'ppk'   => $data['ppk'],
                     ]);
                 }),
         ];
