@@ -701,6 +701,10 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
+.dark #map .leaflet-tile-pane {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
 /* ==========================================================================
    ADMIN DASHBOARD PREMIUM STYLING (MATCHING ABSENSI SAYA THEME)
    ========================================================================== */
